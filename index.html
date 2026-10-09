@@ -1,0 +1,819 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>body{margin:0}</style></head><body>
+<title>Quick-Commerce Customer Voice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: analyst workbook — slim masthead, sticky tab strip, KPI band, chart cards in a 12-col grid that collapses to one column on phones */
+:root{
+  --bg:#f3f5f8; --surface:#ffffff; --surface-2:#eef1f6; --ink:#141a26; --ink-2:#4a5263; --muted:#7a8293; --line:#dfe3ea; --grid:#e9ecf1;
+  --accent:#1f3b6e; --accent-ink:#ffffff; --hi:#fff4d6;
+  --s1:#1a9aa8; --s2:#d4457d; --s3:#3b6fd6; --s4:#7d8a2a; --s5:#9a7b62; --blinkit:#f8cb46; --blinkit-ink:#0c831f; --zepto:#5e1ebe; --instamart:#fc8019; --neutral:#9aa1ad;
+  --good:#0ca30c; --warn:#f08c00; --crit:#d03b3b; --r1:#d03b3b; --r2:#ee8a5b; --r3:#c4c9d2; --r4:#8fcf9a; --r5:#1f9e4a;
+  --f-display:"Archivo","Segoe UI",system-ui,sans-serif; --f-body:"Source Sans 3","Segoe UI",system-ui,sans-serif; --f-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f1218; --surface:#181c24; --surface-2:#20252f; --ink:#f2f4f8; --ink-2:#c3c8d2; --muted:#8d94a3; --line:#2b313c; --grid:#262b35;
+  --accent:#86b6ef; --accent-ink:#0f1218; --hi:#3a2f12;
+  --s1:#27b0bf; --s2:#e0629a; --s3:#5b8ef0; --s4:#a3b23f; --s5:#b8957a; --blinkit:#f8cb46; --blinkit-ink:#3fbf55; --zepto:#a274f7; --instamart:#fc8019; --neutral:#6b7280; --good:#2fb52f; --warn:#f59f2a; --crit:#e05252; --r1:#e05252; --r2:#d9774a; --r3:#5b6270; --r4:#4f9e5d; --r5:#2fb55a; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#0f1218; --surface:#181c24; --surface-2:#20252f; --ink:#f2f4f8; --ink-2:#c3c8d2; --muted:#8d94a3; --line:#2b313c; --grid:#262b35;
+  --accent:#86b6ef; --accent-ink:#0f1218; --hi:#3a2f12;
+  --s1:#27b0bf; --s2:#e0629a; --s3:#5b8ef0; --s4:#a3b23f; --s5:#b8957a; --blinkit:#f8cb46; --blinkit-ink:#3fbf55; --zepto:#a274f7; --instamart:#fc8019; --neutral:#6b7280; --good:#2fb52f; --warn:#f59f2a; --crit:#e05252; --r1:#e05252; --r2:#d9774a; --r3:#5b6270; --r4:#4f9e5d; --r5:#2fb55a; color-scheme:dark }
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5}
+.wrap{max-width:1240px;margin:0 auto;padding-inline:20px;padding-block:0 40px}
+header.mast{padding-block:26px 18px;display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:flex-end;border-bottom:1px solid var(--line)}
+.eyebrow{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+h1{font-family:var(--f-display);font-weight:800;font-size:clamp(26px,4vw,38px);line-height:1.08;margin:6px 0 6px;letter-spacing:-.01em;text-wrap:balance}
+.lede{color:var(--ink-2);max-width:68ch;margin:0}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-family:var(--f-mono);font-size:12px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:5px 11px;color:var(--ink-2);white-space:nowrap}
+.chip b{color:var(--ink)}
+nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
+nav.tabs::-webkit-scrollbar{display:none}
+.tabrow{display:flex;gap:4px;padding-block:8px;min-width:max-content}
+.tab{font:600 14px var(--f-body);color:var(--ink-2);background:transparent;border:1px solid transparent;border-radius:8px;padding:7px 13px;cursor:pointer;white-space:nowrap}
+.tab:hover{background:var(--surface)}
+.tab[aria-selected="true"]{background:var(--accent);color:var(--accent-ink)}
+.tab:focus-visible,.seg button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+section.panel{padding-top:20px;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px}
+.sp12{grid-column:span 12}.sp8{grid-column:span 8}.sp7{grid-column:span 7}.sp6{grid-column:span 6}.sp5{grid-column:span 5}.sp4{grid-column:span 4}
+@media (max-width:900px){.sp8,.sp7,.sp6,.sp5,.sp4{grid-column:span 12}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 18px 16px;min-width:0;display:flex;flex-direction:column;gap:10px}
+.card h2{font-family:var(--f-display);font-size:17px;font-weight:700;margin:0;letter-spacing:-.005em}
+.card .sub{color:var(--muted);font-size:13px;margin:-6px 0 0}
+.card .take{font-size:14px;color:var(--ink-2);margin:0;border-top:1px dashed var(--line);padding-top:9px}
+.card .take b{color:var(--ink)}
+.chart{position:relative;height:300px}.chart.tall{height:380px}.chart.short{height:230px}
+.chart svg{display:block;width:100%;height:100%;overflow:visible}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;color:var(--ink-2)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--surface);font-size:12.5px;line-height:1.4;padding:7px 10px;border-radius:8px;white-space:nowrap;z-index:3;transform:translate(-50%,calc(-100% - 10px));opacity:0;transition:opacity .08s}
+.tip.on{opacity:1}
+.tip b{font-weight:700}
+.ax{fill:var(--ink-2);font-size:12px;font-family:var(--f-body)}
+.ax-sm{fill:var(--muted);font-size:11px;font-family:var(--f-body)}
+.gl{stroke:var(--grid);stroke-width:1}
+.lbl{fill:var(--ink);font-size:12px;font-weight:600;font-family:var(--f-body)}
+.hit{fill:transparent;cursor:default}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+@media (max-width:900px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:480px){.kpis{grid-template-columns:minmax(0,1fr)}}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.kpi .k{font-size:13px;color:var(--ink-2);font-weight:600}
+.kpi .vals{display:flex;gap:18px;align-items:baseline;flex-wrap:wrap}
+.kpi .v{display:flex;flex-direction:column}
+.kpi .v b{font-family:var(--f-mono);font-size:27px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.1}
+.kpi .v span{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:5px}
+.sw{width:10px;height:10px;border-radius:3px;display:inline-block;flex:none}
+.kpi .note{font-size:12.5px;color:var(--muted)}
+.findings{margin:0;padding:0;list-style:none;display:grid;gap:10px;counter-reset:f}
+.findings li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px;font-size:14.5px;color:var(--ink-2)}
+.findings li::before{counter-increment:f;content:counter(f);font-family:var(--f-mono);font-weight:700;font-size:12px;width:24px;height:24px;border-radius:6px;background:var(--surface-2);color:var(--ink);display:flex;align-items:center;justify-content:center}
+.findings b{color:var(--ink)}
+.seg{display:inline-flex;background:var(--surface-2);border-radius:8px;padding:3px;gap:2px;flex-wrap:wrap}
+.seg button{font:600 13px var(--f-body);border:0;background:transparent;color:var(--ink-2);padding:6px 11px;border-radius:6px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.12)}
+.ctrl{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.quotes{display:grid;gap:10px}
+.q{background:var(--surface-2);border-radius:10px;padding:11px 13px;font-size:14px;color:var(--ink-2)}
+.q .who{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);display:flex;gap:6px;align-items:center;margin-bottom:4px}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:760px}
+th{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:left;padding:9px 10px;border-bottom:1px solid var(--line)}
+td{padding:11px 10px;border-bottom:1px solid var(--grid);vertical-align:top;color:var(--ink-2)}
+td.app{font-weight:700;color:var(--ink);white-space:nowrap}
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;border-radius:999px;padding:2px 9px;background:var(--surface-2);color:var(--ink);white-space:nowrap}
+.steps{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+@media (max-width:900px){.steps{grid-template-columns:minmax(0,1fr)}}
+.step{background:var(--surface-2);border-radius:10px;padding:12px}
+.step .n{font-family:var(--f-mono);font-size:11px;color:var(--muted);letter-spacing:.08em}
+.step b{display:block;margin:2px 0 4px}
+.step p{margin:0;font-size:13.5px;color:var(--ink-2)}
+.big{font-family:var(--f-mono);font-size:30px;font-weight:700;font-variant-numeric:tabular-nums}
+.statrow{display:flex;gap:22px;flex-wrap:wrap}
+.statrow div{display:flex;flex-direction:column}.statrow span{font-size:12.5px;color:var(--muted)}
+ul.plain{margin:0;padding-left:18px;color:var(--ink-2);font-size:14px;display:grid;gap:4px}
+footer{margin-top:24px;color:var(--muted);font-size:12.5px}
+.hero-fix{background:var(--surface);border-left:5px solid var(--crit)}
+.hero-line{font-size:clamp(16px,2vw,19px);line-height:1.45;margin:0;color:var(--ink-2);max-width:90ch}.hero-line b{color:var(--ink)}
+.zones{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:13px;color:var(--ink-2)}.zones span{display:inline-flex;align-items:center;gap:7px}.zones b{color:var(--ink)}
+.zd{width:12px;height:12px;border-radius:50%;display:inline-block;flex:none}
+.fixhead,.fixrow{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1.5fr) minmax(0,1.5fr) minmax(0,1fr);gap:10px}
+.fixhead span{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:0 4px}
+.fixrows{display:grid;gap:10px}
+.fixrow>div{background:var(--surface-2);border-radius:10px;padding:11px 12px;font-size:13.5px;color:var(--ink-2);min-width:0}
+.fixrow .prob{border-left:5px solid var(--z);background:color-mix(in srgb,var(--z) 12%,var(--surface))}
+.fixrow .prob b{display:block;color:var(--ink);font-size:14.5px}
+.fixrow .tag{display:inline-block;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;color:var(--ink);margin-bottom:3px}
+.fixrow .stat{font-size:12.5px;color:var(--muted);margin-top:3px}
+.fixrow ul{margin:0;padding-left:16px;display:grid;gap:3px}
+.fixrow .who{font-family:var(--f-mono);font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.fixrow .met b{color:var(--ink)}
+.fixrow .lab{display:none}
+@media (max-width:900px){.fixhead{display:none}.fixrow{grid-template-columns:minmax(0,1fr);gap:6px;padding-bottom:8px;border-bottom:1px dashed var(--line)}.fixrow .lab{display:block;font-family:var(--f-mono);font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px}}
+.journey{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;position:relative}
+.jstep{border-radius:10px;padding:11px 11px 12px;background:color-mix(in srgb,var(--z) 13%,var(--surface));border-top:4px solid var(--z);display:flex;flex-direction:column;gap:4px;min-width:0}
+.jstep .when{font-family:var(--f-mono);font-size:11px;font-weight:700;color:var(--ink)}
+.jstep b{font-family:var(--f-display);font-size:14.5px;color:var(--ink)}
+.jstep p{margin:0;font-size:12.8px;color:var(--ink-2)}
+.jstep .ch{font-size:11.5px;color:var(--muted);margin-top:auto;padding-top:4px}
+.jstep{grid-row:2}.jphase{grid-row:1;grid-column:var(--c);font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:7px;padding-bottom:2px;border-bottom:2px solid var(--z)}
+@media (max-width:900px){.journey{grid-template-columns:minmax(0,1fr)}.jphase{grid-row:auto;grid-column:auto;margin-top:6px}.jstep{grid-row:auto}}
+.rag{display:grid;gap:8px}
+.ragrow{display:grid;grid-template-columns:minmax(0,1.3fr) repeat(3,minmax(0,.75fr)) minmax(0,1.25fr);gap:6px;align-items:stretch;font-size:12.5px}
+.ragrow>span{border-radius:7px;padding:7px 8px;display:flex;align-items:center;min-width:0}
+.ragrow .m{color:var(--ink);font-weight:600;padding-left:0}
+.ragrow .r{background:color-mix(in srgb,var(--crit) 16%,var(--surface));color:var(--ink-2)}
+.ragrow .a{background:color-mix(in srgb,var(--warn) 22%,var(--surface));color:var(--ink-2)}
+.ragrow .g{background:color-mix(in srgb,var(--good) 16%,var(--surface));color:var(--ink-2)}
+.ragrow .now{white-space:nowrap;font-family:var(--f-mono);font-weight:700;color:var(--ink);gap:6px;justify-content:flex-start;background:var(--surface-2)}
+.ragrow.hd span{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);background:none;padding-block:0}
+@media (max-width:480px){.ragrow{grid-template-columns:minmax(0,1fr) repeat(3,minmax(0,.7fr));}.ragrow .now{grid-column:1/-1}.ragrow.hd .nowh{display:none}}
+.vs{display:grid;gap:9px}
+.vsrow{display:grid;grid-template-columns:64px minmax(0,1fr) 62px;gap:8px;align-items:center;font-size:12.5px;color:var(--ink-2)}
+.track{position:relative;height:14px;background:var(--surface-2);border-radius:4px;overflow:hidden}
+.track .fill{position:absolute;top:0;bottom:0;border-radius:0 4px 4px 0}
+.track .mid{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--muted);left:50%}
+.vsrow b{font-family:var(--f-mono);font-size:15px;color:var(--ink);text-align:right;font-variant-numeric:tabular-nums}
+.verdict{font-size:12px;font-weight:600;color:var(--ink);background:var(--surface-2);border-radius:999px;padding:3px 9px;align-self:flex-start}
+.stack{display:grid;gap:22px;padding-block:14px;flex:1;align-content:center}
+.srow{display:grid;grid-template-columns:62px minmax(0,1fr);gap:10px;align-items:center}
+.srow .nm{font-weight:700;font-size:14px;display:flex;align-items:center;gap:6px}
+.sbar{display:flex;height:64px;border-radius:6px;overflow:hidden;gap:2px;background:var(--surface)}
+.sbar span{display:flex;align-items:center;justify-content:center;font:700 13px var(--f-mono);min-width:0;cursor:default}
+.waffles{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.waf h3{margin:0 0 6px;font-size:14px;display:flex;align-items:center;gap:6px}
+.waf .grid{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;max-width:190px}
+.waf .grid i{aspect-ratio:1;border-radius:50%;background:var(--grid);display:block}
+.waf .big{font-family:var(--f-mono);font-size:28px;font-weight:700;margin-top:6px}
+.waf .big small{display:block;font-size:12px;color:var(--muted);font-weight:500;font-family:var(--f-body)}
+.ftiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+@media (max-width:900px){.ftiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.ftiles{grid-template-columns:minmax(0,1fr)}}
+.ft{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.ft .k{font-size:13px;font-weight:600;color:var(--ink-2)}
+.ft svg{display:block;width:100%;height:92px;overflow:visible}
+.ft .c{font-size:13px;color:var(--ink-2)}.ft .c b{color:var(--ink)}
+.flowkey{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--ink-2)}
+.flowkey span{display:inline-flex;align-items:center;gap:6px}
+.plays{display:grid;gap:12px}
+.play{display:grid;grid-template-columns:minmax(0,1.15fr) repeat(5,minmax(0,1fr));gap:4px;align-items:stretch}
+.play .hd{background:var(--surface-2);border-radius:10px;padding:10px 12px;font-size:13px;color:var(--ink-2);display:flex;flex-direction:column;gap:6px}
+.play .hd b{color:var(--ink);font-size:14px}
+.play .hd .bar{height:6px;border-radius:3px;background:var(--grid);overflow:hidden}.play .hd .bar i{display:block;height:100%;border-radius:3px}
+.chev{position:relative;padding:10px 12px 10px 18px;font-size:12.8px;color:var(--ink);background:color-mix(in srgb,var(--z) 16%,var(--surface));border-top:3px solid var(--z);border-radius:6px;min-width:0}
+.chev .t{display:block;font-family:var(--f-mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+@media (max-width:900px){.play{grid-template-columns:minmax(0,1fr)}.chev{border-top:0;border-left:4px solid var(--z)}}
+.vh{position:absolute;left:-9999px}
+/* ===== Theme layer: indigo chrome, app colours for data, one pattern everywhere ===== */
+:root{ --bg:#f2f2f5; --accent:#3a3f4b; --accent-2:#6b7280; --accent-soft:#ececf1; --band-a:#141318; --band-b:#24222b; --band-c:#34313c; --card-shadow:0 1px 2px rgba(30,30,80,.06),0 4px 14px rgba(30,30,80,.05); }
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){ --bg:#0e0f13; --accent:#c9ccd6; --accent-2:#8d93a3; --accent-soft:#1f2129; --band-a:#18171d; --band-b:#22202a; --band-c:#2c2935; --card-shadow:0 1px 2px rgba(0,0,0,.4) }}
+:root[data-theme="dark"]{ --bg:#0e0f13; --accent:#c9ccd6; --accent-2:#8d93a3; --accent-soft:#1f2129; --band-a:#18171d; --band-b:#22202a; --band-c:#2c2935; --card-shadow:0 1px 2px rgba(0,0,0,.4) }
+header.mast{position:relative;overflow:hidden;margin-top:16px;padding:26px 26px 22px;border:0;border-radius:16px;background:linear-gradient(118deg,var(--band-a),var(--band-b) 55%,var(--band-c));color:#fff;box-shadow:var(--card-shadow)}
+header.mast .eyebrow{color:rgba(255,255,255,.75)} header.mast h1{color:#fff} header.mast .lede{color:rgba(255,255,255,.88)}
+header.mast .chip{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.28);color:rgba(255,255,255,.9)} header.mast .chip b{color:#fff}
+.appkey{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:rgba(255,255,255,.9);margin-top:10px}.appkey span{display:inline-flex;align-items:center;gap:6px}.appkey i{width:12px;height:12px;border-radius:3px;display:inline-block;box-shadow:0 0 0 2px rgba(255,255,255,.5)}
+nav.tabs{border-bottom:0;margin-top:10px}
+.tab{transition:background .15s,color .15s}
+.tab:hover{background:var(--accent-soft);color:var(--ink)}
+.tab[aria-selected="true"]{background:var(--band-b);color:#fff;box-shadow:inset 0 -3px 0 0 var(--blinkit),0 2px 8px rgba(0,0,0,.18)}
+.card,.kpi,.ft{position:relative;border-color:transparent;box-shadow:var(--card-shadow);transition:box-shadow .2s,transform .2s}
+.card::before,.kpi::before,.ft::before{content:"";position:absolute;left:16px;right:16px;top:0;height:3px;border-radius:0 0 3px 3px;background:linear-gradient(90deg,var(--blinkit) 0 50%,var(--zepto) 50% 100%)}
+@media (hover:hover){.card:hover,.kpi:hover,.ft:hover{box-shadow:0 2px 4px rgba(30,30,80,.08),0 10px 28px rgba(30,30,80,.10)}}
+.card h2{display:flex;align-items:center;gap:9px}
+.card h2::before{content:"";width:4px;height:17px;border-radius:2px;background:linear-gradient(var(--blinkit) 50%,var(--zepto) 50%);flex:none}
+.card .take{border-top:0;background:var(--accent-soft);border-left:3px solid var(--accent);border-radius:8px;padding:9px 12px}
+.verdict{background:var(--accent-soft);color:var(--ink)}
+.chart svg.hl path.bar{opacity:.35;transition:opacity .12s} .chart svg.hl path.bar.on{opacity:1}
+.chart svg path.bar{transition:opacity .12s}
+.hit{cursor:crosshair}
+.legend.toggle button{font:inherit;font-size:13px;color:var(--ink-2);background:var(--surface-2);border:1px solid transparent;border-radius:999px;padding:3px 10px 3px 8px;display:inline-flex;align-items:center;gap:6px;cursor:pointer;transition:opacity .15s,border-color .15s}
+.legend.toggle button:hover{border-color:var(--accent)}
+.legend.toggle button[aria-pressed="false"]{opacity:.45;text-decoration:line-through}
+.legend.toggle button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.tip{background:#1c1b22;color:#fff;box-shadow:0 6px 18px rgba(0,0,0,.2)}
+section.panel.enter>*{animation:rise .35s ease both}
+@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.hint{font-size:12.5px;color:var(--muted);margin-top:8px}
+header.mast::after{content:"";position:absolute;left:0;right:0;bottom:0;height:6px;background:linear-gradient(90deg,var(--blinkit) 0 50%,var(--zepto) 50% 100%)}
+header.mast::before{content:"";position:absolute;right:-60px;top:-80px;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--zepto) 45%,transparent),transparent 70%);pointer-events:none}
+header.mast>*{position:relative}
+.brand{display:inline-flex;align-items:center;gap:7px;font-weight:800;border-radius:7px;padding:3px 9px;font-size:13px}
+.brand.b{background:var(--blinkit);color:#1a1a1a;gap:0}.brand.b em{font-style:normal;color:#0c831f}
+.brand.z{background:var(--zepto);color:#fff}
+.brand.i{background:var(--instamart);color:#fff}
+.why .voice{font-size:15.5px;line-height:1.6;color:var(--ink-2);margin:0;max-width:70ch}.why .voice b{color:var(--ink)}
+.why h2::before{background:var(--blinkit)!important}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+<div class="wrap">
+<header class="mast">
+  <div style="min-width:0">
+    <div class="eyebrow">A customer-voice study by Ananya Geete · Blinkit vs Zepto</div>
+    <h1>Quick-Commerce Customer Voice</h1>
+    <p class="lede">I wanted to find out why people stay with or leave India's two biggest 10-minute grocery apps. So I went through 22,651 public app reviews, tagged what each unhappy customer was complaining about, and turned it into a simple plan to win them back.</p>
+    <div class="appkey"><span class="brand b">blink<em>it</em></span><span class="brand z">zepto</span><span class="brand i">Instamart · for reference</span><span style="opacity:.8">· Hover any chart for details, click legend items to show or hide</span></div>
+  </div>
+  <div class="chips" aria-label="Dataset facts">
+    <span class="chip"><b>22,651</b> detailed reviews</span>
+    <span class="chip"><b>1,437</b> complaints tagged</span>
+    <span class="chip">Play Store &amp; App Store</span>
+    <span class="chip">Mar–Oct 2026</span>
+  </div>
+</header>
+<nav class="tabs" aria-label="Dashboard sections"><div class="tabrow" role="tablist">
+  <button class="tab" role="tab" id="t-overview" aria-controls="overview" aria-selected="true">Overview</button>
+  <button class="tab" role="tab" id="t-drivers" aria-controls="drivers" aria-selected="false">Why people leave</button>
+  <button class="tab" role="tab" id="t-trends" aria-controls="trends" aria-selected="false">Zepto over time</button>
+  <button class="tab" role="tab" id="t-standout" aria-controls="standout" aria-selected="false">Hidden patterns</button>
+  <button class="tab" role="tab" id="t-fix" aria-controls="fix" aria-selected="false">Fix &amp; retain</button>
+  <button class="tab" role="tab" id="t-playbook" aria-controls="playbook" aria-selected="false">Win-back plan</button>
+  <button class="tab" role="tab" id="t-method" aria-controls="method" aria-selected="false">How I did it</button>
+</div></nav>
+
+<!-- OVERVIEW -->
+<section class="panel" id="overview" role="tabpanel" aria-labelledby="t-overview">
+  <div class="card sp7 why">
+    <h2>Why I did this</h2>
+    <p class="voice">I use quick-commerce apps myself. I like <b>Blinkit</b> because it usually has what I'm looking for, while <b>Zepto</b> often doesn't have the items I want. I used to like <b>Instamart</b> for its offers, but now there are fewer offers and the same product often costs more than on Blinkit.</p>
+    <p class="voice">So I wanted to check: <b>is my experience what most customers feel, and what actually makes people leave an app?</b></p>
+  </div>
+  <div class="card sp5 why">
+    <h2>What surprised me</h2>
+    <ul class="plain">
+      <li><b>Stock wasn't the big issue.</b> I expected Zepto's main problem to be missing stock, but only about 3 in 100 Zepto complaints were about it. Quality, support and missing items in the order mattered far more.</li>
+      <li><b>Fees are Blinkit's problem,</b> not Zepto's.</li>
+      <li><b>The longer the review, the angrier it is.</b></li>
+      <li><b>The day of the week makes no difference</b> to ratings.</li>
+    </ul>
+  </div>
+  <div class="sp12 kpis" id="kpis"></div>
+  <div class="card sp7">
+    <h2>How customers rate each app</h2><p class="sub">Every 100 detailed reviews, split by star rating · same window, 7–17 Jul 2026</p>
+    <div class="legend" id="star-legend"></div>
+    <div id="stack" class="stack"></div>
+    <p class="take">Blinkit is <b>split down the middle</b>: 42 one-star, 41 five-star. Zepto is <b>overwhelmingly one-star (72 in 100)</b>.</p>
+  </div>
+  <div class="card sp5">
+    <h2>Out of 100 unhappy customers…</h2><p class="sub">…how many say they will leave or switch apps · 1–3★ reviews, July 2026</p>
+    <div class="waffles" id="waffles"></div>
+    <p class="take">Zepto's unhappy customers are <b>2.6× more likely</b> to say they're leaving.</p>
+  </div>
+  <div class="sp12 ftiles" id="ftiles"></div>
+  <div class="card sp12">
+    <h2>The bigger picture: fans minus unhappy customers, from 1.1 million reviews</h2><p class="sub">Each month: % of 5★ reviews minus % of 1–3★ reviews (an NPS-style score) · from a public study of all Play Store reviews, Mar–Sep 2026</p>
+    <div class="chart short"><div data-c id="c-bench" role="img" aria-label="Monthly NPS proxy for Blinkit, Zepto and Instamart"></div></div>
+    <p class="take">Across all reviews, Blinkit and Instamart sit near <b>+44</b> while Zepto sits near <b>+10</b>, with a sharp <b>April 2026 crash to −14</b>. Our detailed-review sample shows the same gap, only harsher, because long reviews come mostly from unhappy users.</p>
+  </div>
+</section>
+
+<!-- DRIVERS -->
+<section class="panel" id="drivers" role="tabpanel" aria-labelledby="t-drivers" hidden>
+  <div class="card sp12">
+    <div class="ctrl"><div><h2>What unhappy customers complain about</h2><p class="sub" id="drv-sub" style="margin-top:4px">Main complaint in each 1–3★ review, as classified by AI · July 2026</p></div>
+      <div class="seg" role="group" aria-label="Data source"><button aria-pressed="true" data-src="ours">Our July data</button><button aria-pressed="false" data-src="bench">Bigger study (Jul–Sep)</button></div></div>
+    <div class="chart tall"><div data-c id="c-drivers" role="img" aria-label="Complaint drivers by app"></div></div>
+    <p class="take">Zepto's problems are <b>operational</b>: quality &amp; freshness, support &amp; rider behaviour and missing items make up <b>54%</b> of complaints. Blinkit's number one complaint is <b>fees &amp; prices (about 18%)</b>. A bigger public study shows the same order.</p>
+  </div>
+  <div class="card sp12">
+    <h2>Who has it worse? The difference at a glance</h2><p class="sub">Zepto's share minus Blinkit's share of complaints, in percentage points · July 2026</p>
+    <div class="legend"><span><i class="sw" style="background:var(--zepto)"></i>Bigger problem for Zepto</span><span><i class="sw" style="background:var(--blinkit)"></i>Bigger problem for Blinkit</span></div>
+    <div class="chart"><div data-c id="c-diff" role="img" aria-label="Difference in complaint share, Zepto minus Blinkit"></div></div>
+    <p class="take">Support (+9 pts), quality (+5) and missing items (+5) lean hard toward Zepto. Fees (−11 pts) are <b>Blinkit's</b> problem.</p>
+  </div>
+  <div class="card sp6">
+    <h2>Which complaints make Zepto users leave</h2><p class="sub">Of the unhappy Zepto customers with each complaint, how many say they are leaving or switching</p>
+    <div class="chart"><div data-c id="c-churndrv" role="img" aria-label="Churn intent by complaint for Zepto"></div></div>
+    <p class="take"><b>Quality (15%)</b>, <b>missing items (13%)</b> and <b>support (13%)</b> drive the most exits. App bugs annoy people but rarely make them leave (4%).</p>
+  </div>
+  <div class="card sp6">
+    <h2>Money at stake per complaint</h2><p class="sub">Median rupee amount quoted in 1–3★ reviews that mention an amount</p>
+    <div class="chart"><div data-c id="c-money" role="img" aria-label="Median rupees mentioned by complaint"></div></div>
+    <p class="take" id="money-take"></p>
+  </div>
+  <div class="card sp12"><h2>In customers' own words</h2><p class="sub">Real review excerpts for each app's top complaints (no names)</p><div class="quotes" id="drv-quotes" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))"></div></div>
+</section>
+
+<!-- TRENDS -->
+<section class="panel" id="trends" role="tabpanel" aria-labelledby="t-trends" hidden>
+  <div class="card sp6">
+    <h2>Zepto average rating by month</h2><p class="sub">Detailed Google Play reviews · 21,448 reviews · Mar–Sep 2026</p>
+    <div class="chart"><div data-c id="c-zavg" role="img" aria-label="Zepto average star rating by month"></div></div>
+    <p class="take"><b>April 2026 was the low point (1.63★)</b>, the same dip shows up in the bigger public study. Ratings recovered in June and have slipped again since.</p>
+  </div>
+  <div class="card sp6">
+    <h2>Customers threatening to leave</h2><p class="sub">Share of Zepto 1–3★ reviews that say uninstall, switching, never ordering again</p>
+    <div class="chart"><div data-c id="c-zchurn" role="img" aria-label="Zepto churn intent by month"></div></div>
+    <p class="take">Talk of leaving rose from <b>5.6% in March to 8.6% in September</b>. That's a growing pool of customers a win-back campaign could still reach.</p>
+  </div>
+  <div class="card sp12">
+    <div class="ctrl"><div><h2>How Zepto's complaints are shifting</h2><p class="sub" style="margin-top:4px">Share of Zepto 1–3★ reviews mentioning each issue (keyword scan, all months)</p></div>
+      <div class="seg" role="group" aria-label="Issue group" id="theme-seg"><button aria-pressed="true" data-set="a">Rising issues</button><button aria-pressed="false" data-set="b">Improving issues</button></div></div>
+    <div class="chart tall"><div data-c id="c-zthemes" role="img" aria-label="Zepto complaint themes by month"></div></div>
+    <p class="take" id="theme-take"></p>
+  </div>
+  <div class="card sp12">
+    <h2>Which app versions hurt Zepto's rating</h2><p class="sub">Average stars by app version (versions with 300+ detailed reviews)</p>
+    <div class="chart"><div data-c id="c-ver" role="img" aria-label="Zepto average rating by app version"></div></div>
+    <p class="take">The <b>26.4.x releases (April)</b> were the worst-rated, with 26.4.4 lowest at <b>1.44★</b>. A product-release signal a customer success team could flag to clients early.</p>
+  </div>
+</section>
+
+<!-- STANDOUT -->
+<section class="panel" id="standout" role="tabpanel" aria-labelledby="t-standout" hidden>
+  <div class="card sp6">
+    <h2>Where Zepto's leavers say they're going</h2><p class="sub" id="comp-sub"></p>
+    <div class="chart"><div data-c id="c-comp" role="img" aria-label="Competitors named by Zepto users who say they are leaving"></div></div>
+    <p class="take">When Zepto users say where they're going, <b>Blinkit comes up most</b> (99 times), well ahead of Instamart (59).</p>
+  </div>
+  <div class="card sp6">
+    <h2>Complaints the crowd amplifies</h2><p class="sub">Zepto: share of complaints vs share of “helpful” votes they collect</p>
+    <div class="chart"><div data-c id="c-votes" role="img" aria-label="Share of complaints vs share of helpful votes by theme"></div></div>
+    <p class="take">Support &amp; rider complaints appear in 40% of reviews but collect <b>63% of all helpful votes</b>. They are the complaints other customers see and agree with.</p>
+  </div>
+  <div class="card sp6">
+    <h2>The anatomy of fee complaints</h2><p class="sub" id="fee-sub"></p>
+    <div class="chart"><div data-c id="c-fees" role="img" aria-label="Types of fees mentioned in fee complaints"></div></div>
+    <p class="take"><b>Handling fees</b> and <b>delivery fees</b> dominate. On Zepto, reviews naming a fee or charge held at 3–4% of complaints from March to August, then rose to <b>6.5% in September</b> and 8.7% in early October (a partial month). Worth watching.</p>
+  </div>
+  <div class="card sp6">
+    <h2>The more they write, the angrier they are</h2><p class="sub">Average stars by review length (words) · July 2026</p>
+    <div class="chart"><div data-c id="c-len" role="img" aria-label="Average stars by review length"></div></div>
+    <p class="take">Zepto reviews over 50 words average <b>1.25★</b>. Long reviews are written by the most frustrated customers, the ones worth reaching first.</p>
+  </div>
+  <div class="card sp7">
+    <h2>What 5-star customers love</h2><p class="sub" id="praise-sub"></p>
+    <div class="chart"><div data-c id="c-praise" role="img" aria-label="What five-star reviewers praise"></div></div>
+    <p class="take"><b>Speed</b> wins for both apps (about 30%). Zepto fans praise <b>prices &amp; offers (19%)</b> and <b>freshness (17%)</b>, so these are the strengths a win-back message should lead with.</p>
+  </div>
+  <div class="card sp5">
+    <h2>Does the day matter?</h2><p class="sub">Zepto average stars by weekday</p>
+    <div class="chart short"><div data-c id="c-wd" role="img" aria-label="Zepto average stars by weekday"></div></div>
+    <p class="take">Ratings barely move by weekday (1.82–1.92★). So campaigns should be <b>triggered by events</b> (a bad order, inactivity), not by calendar day.</p>
+  </div>
+  <div class="card sp12"><h2>Most-upvoted Zepto reviews</h2><p class="sub">The complaints most other customers marked “helpful”</p><div class="quotes" id="voted" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr))"></div></div>
+</section>
+
+<!-- PLAYBOOK -->
+<section class="panel" id="fix" role="tabpanel" aria-labelledby="t-fix" hidden>
+  <div class="card sp12 hero-fix">
+    <div class="eyebrow">The answer in one line</div>
+    <p class="hero-line"><b>Three problems cause two in three of Zepto's "I'm leaving" reviews.</b> Fix quality, support and missing items in the operation, then reach every unhappy customer with the right message within hours, not weeks.</p>
+    <div class="zones" aria-label="Colour key">
+      <span><i class="zd" style="background:var(--crit)"></i><b>Fix now</b> · most likely to make people leave</span>
+      <span><i class="zd" style="background:var(--warn)"></i><b>Fix next</b> · moderate risk</span>
+      <span><i class="zd" style="background:var(--neutral)"></i><b>Monitor</b> · annoying, rarely fatal</span>
+    </div>
+  </div>
+
+  <div class="card sp7">
+    <h2>Where to fix first</h2><p class="sub">Zepto, July 2026 · each bubble is a complaint type · bubble size = share of "helpful" votes it collects</p>
+    <div class="chart tall"><div data-c id="c-matrix" role="img" aria-label="Complaint share versus share who say they will leave"></div></div>
+    <p class="take">Top-right is the danger zone: common complaints that also make people leave. <b>Quality, support and missing items</b> sit there.</p>
+  </div>
+  <div class="card sp5">
+    <h2>Share of all leave-threats</h2><p class="sub">Zepto 1–3★ reviewers who say they'll leave (99 of 895), split by their main complaint</p>
+    <div class="chart tall"><div data-c id="c-risk" role="img" aria-label="Leave-threats by complaint type"></div></div>
+    <p class="take">Quality (27), support (22) and missing items (16) account for <b>65 of 99</b> leave-threats. Fix these three and most of the "I'm leaving" reviews go with them.</p>
+  </div>
+
+  <div class="card sp12">
+    <h2>Fix the cause, then recover the customer</h2><p class="sub">For each problem: what the business fixes, what message the customer gets, and how to check it worked</p>
+    <div class="fixhead" aria-hidden="true"><span>Problem</span><span>1 · Fix the cause (operations)</span><span>2 · Win the customer back (messaging)</span><span>3 · Prove it worked</span></div>
+    <div class="fixrows" id="fixrows"></div>
+  </div>
+
+  <div class="card sp12">
+    <h2>The retention journey for an unhappy customer</h2><p class="sub">What happens after a complaint or a 1–3★ rating, hour by hour and day by day</p>
+    <div class="journey" id="journey"></div>
+    <p class="take">Speed matters most in the first 24 hours. Messages are triggered by <b>events</b> (a complaint, a refund, inactivity), because our data shows the day of the week makes no difference.</p>
+  </div>
+
+  <div class="card sp7">
+    <h2>Targets: where Zepto is vs. where to aim</h2><p class="sub">Bar = now (Sep 2026, or July for head-to-head) · marker = target · targets are Zepto's own March level or Blinkit's level</p>
+    <div class="chart"><div data-c id="c-targets" role="img" aria-label="Current values against targets"></div></div>
+    <p class="take">Every target is one Zepto or Blinkit has <b>already hit</b>, so none of them is wishful thinking.</p>
+  </div>
+  <div class="card sp5">
+    <h2>Weekly retention health check</h2><p class="sub">Traffic-light rules for a weekly retention review · thresholds are my suggestion</p>
+    <div class="rag" id="rag"></div>
+    <p class="take">Red on any line triggers a review that week. Today <b>three of four are red</b>.</p>
+  </div>
+</section>
+
+<section class="panel" id="playbook" role="tabpanel" aria-labelledby="t-playbook" hidden>
+  <div class="card sp12">
+    <h2>My win-back plan</h2><p class="sub">Each idea turns one finding into: who to target, when to message them, what to send, what to test, and how to measure it</p>
+    <div class="flowkey" id="flowkey"></div><div class="plays" id="plays"></div>
+  </div>
+  <div class="card sp6"><h2>How these campaigns would run</h2><ul class="plain">
+    <li><b>Groups:</b> pick customers by what they did, e.g. complained, gave a low rating, or stopped ordering.</li>
+    <li><b>Message journey:</b> push first, then WhatsApp if it isn't opened in 24 hours, without over-messaging.</li>
+    <li><b>A/B test:</b> send two versions to two similar groups, and keep one group with no message to compare.</li>
+    <li><b>Measure:</b> check how many come back and order again within 7 and 14 days.</li></ul></div>
+  <div class="card sp6"><h2>Who to reach first</h2><ul class="plain">
+    <li><b>Named a competitor:</b> Zepto users who say they're moving to Blinkit or Instamart.</li>
+    <li><b>Loyal customers at risk:</b> long-time or pass holders who now complain (about 3 in 100 unhappy Zepto customers).</li>
+    <li><b>Long, angry reviews:</b> 50+ word reviews average 1.25★. These are the most frustrated users.</li>
+    <li><b>Upvoted complaints:</b> support failures that others publicly agree with.</li></ul></div>
+  <div class="card sp12"><h2>Leavers in their own words</h2><div class="quotes" id="churnq" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))"></div></div>
+</section>
+
+<!-- METHOD -->
+<section class="panel" id="method" role="tabpanel" aria-labelledby="t-method" hidden>
+  <div class="card sp12">
+    <h2>From 22,661 reviews to a checked answer</h2><p class="sub">How many reviews survive each step · log scale, so every step stays visible</p>
+    <div class="chart short"><div data-c id="c-funnel" role="img" aria-label="Review funnel through each analysis step"></div></div>
+  </div>
+  <div class="card sp12"><h2>How the analysis was built</h2>
+    <div class="steps">
+      <div class="step"><span class="n">STEP 1</span><b>Collect</b><p>22,661 public Play Store &amp; App Store reviews, taken from open datasets shared on GitHub.</p></div>
+      <div class="step"><span class="n">STEP 2</span><b>Clean</b><p>Kept reviews with at least 6 words, removed duplicates and all usernames: 22,651 left.</p></div>
+      <div class="step"><span class="n">STEP 3</span><b>Compare fairly</b><p>Compared both apps over the same days (7–17 Jul 2026): 1,057 Blinkit vs 1,147 Zepto reviews.</p></div>
+      <div class="step"><span class="n">STEP 4</span><b>Tag the complaints</b><p>Used an AI tool to tag the main complaint in all 1,437 unhappy July reviews, and mark anyone saying they'd leave.</p></div>
+      <div class="step"><span class="n">STEP 5</span><b>Check it</b><p>Ran a second, separate AI tagging round on 120 reviews: about 97 in 100 tags matched. Results also match a bigger public study.</p></div>
+    </div></div>
+  <div class="card sp6"><h2>Why simple word search wasn't enough</h2><p class="sub">Of the tagged complaints, how many a basic word search would have found (Zepto, July)</p>
+    <div class="chart"><div data-c id="c-kw" role="img" aria-label="Keyword recall by complaint group"></div></div>
+    <p class="take">Keywords miss <b>over half</b> of app &amp; payment complaints and about <b>4 in 10</b> missing-item complaints. Reading for meaning is what makes the driver numbers trustworthy.</p></div>
+  <div class="card sp6"><h2>Agreement check</h2>
+    <div class="statrow"><div><b class="big">97 / 100</b><span>tags matched</span></div><div><b class="big">99 / 100</b><span>"leaving" flags matched</span></div></div>
+    <ul class="plain"><li>120 random complaints were tagged a second time, without seeing the first tags.</li><li>The two rounds agreed almost every time, so the tags are consistent.</li></ul>
+    <h2 style="margin-top:6px">Data sources</h2><ul class="plain">
+    <li>Zepto: github.com/the-machine-learner/zepto-review-discovery-engine</li>
+    <li>Blinkit: github.com/Ruchika2426/BlinkitReviewAnalysis</li>
+    <li>Benchmark (MIT): github.com/kaasyapv/Quick-Commerce-NPS-Benchmark-from-App-Reviews</li></ul></div>
+  <div class="card sp12"><h2>Limitations</h2><ul class="plain">
+    <li>Blinkit covers only 7–17 Jul 2026, so head-to-head numbers use that window. Zepto trends use Mar–Sep 2026.</li>
+    <li>Longer reviews tend to be angrier than short ones, so my scores are lower than the bigger study. The gap between the two apps is what matters.</li>
+    <li>Reviews come from third-party public collections, English only. Blinkit's App Store IDs are generated.</li>
+    <li>Month-by-month trends use a simple word search. The main complaint shares use the AI tags.</li></ul></div>
+</section>
+<footer>An independent study by Ananya Geete · October 2026 · Built with public review data and AI tools · No usernames stored.</footer>
+</div>
+<script>
+const D = {"overview": {"total": 22651, "blinkit": 1057, "zepto": 21594, "ai_labelled": 1437, "agreement": {"n": 120, "agree": 96.7, "kappa": 0.962, "churn_agree": 99.2}}, "july": {"Blinkit": {"reviews": 1057, "avg_stars": 3.01, "pct_1star": 41.8, "pct_5star": 40.7, "nps": -10.6, "detractors": 542, "churn_pct": 4.2, "loyal_pct": 1.7, "loyal_churn_pct": 0.6, "stars_dist": {"1": 41.8, "2": 4.5, "3": 4.9, "4": 8.0, "5": 40.7}}, "Zepto": {"reviews": 1147, "avg_stars": 1.93, "pct_1star": 72.1, "pct_5star": 18.8, "nps": -59.2, "detractors": 895, "churn_pct": 11.1, "loyal_pct": 2.8, "loyal_churn_pct": 1.1, "stars_dist": {"1": 72.1, "2": 3.2, "3": 2.7, "4": 3.1, "5": 18.8}}}, "drivers": {"labels": ["Quality & freshness", "Support & rider behaviour", "Missing / wrong items", "App & payment bugs", "Refunds & returns", "Fees & prices", "Late delivery", "Out of stock / unserviceable", "Other", "No specific complaint"], "Blinkit": [15.3, 10.0, 8.5, 10.0, 12.0, 18.1, 5.4, 5.9, 10.0, 5.0], "Zepto": [20.7, 19.3, 13.5, 10.7, 9.2, 7.2, 8.5, 2.9, 4.4, 3.7], "benchBlinkit": [13.2, 12.1, 8.6, 8.9, 8.8, 20.8, 10.3, 5.0, 3.7, 8.6], "benchZepto": [21.1, 14.2, 15.0, 7.8, 10.8, 8.6, 8.2, 3.3, 5.0, 6.0], "n": {"Blinkit": 542, "Zepto": 895}}, "churnByDriver": {"Blinkit": {"Quality & freshness": 2.4, "Support & rider behaviour": 5.6, "Missing / wrong items": 0.0, "App & payment bugs": 0.0, "Refunds & returns": 10.8, "Fees & prices": 3.1, "Late delivery": 3.4, "Out of stock / unserviceable": 3.1}, "Zepto": {"Quality & freshness": 14.6, "Support & rider behaviour": 12.7, "Missing / wrong items": 13.2, "App & payment bugs": 4.2, "Refunds & returns": 11.0, "Fees & prices": 9.4, "Late delivery": 10.5, "Out of stock / unserviceable": 0.0}}, "competitors": {"Blinkit": {"zepto": 17, "flipkart": 6, "amazon": 5, "swiggy": 1, "other": 1, "instamart": 1}, "Zepto": {"blinkit": 29, "instamart": 6, "bigbasket": 4, "amazon": 2, "swiggy": 2, "other": 2, "flipkart": 1}}, "competitorsFull": {"blinkit": 99, "instamart": 59, "flipkart": 28, "amazon": 20, "bigbasket": 17, "dmart": 2, "jiomart": 1}, "churnNFull": 1232, "detNFull": 17149, "months": ["2026-03", "2026-04", "2026-05", "2026-06", "2026-07", "2026-08", "2026-09"], "zMonthly": [{"month": "2026-03", "reviews": 2183, "avg": 2.02, "p1": 69.58, "nps": -55.4}, {"month": "2026-04", "reviews": 3109, "avg": 1.63, "p1": 79.9, "nps": -73.3}, {"month": "2026-05", "reviews": 3692, "avg": 1.76, "p1": 76.76, "nps": -67.3}, {"month": "2026-06", "reviews": 3155, "avg": 2.05, "p1": 68.46, "nps": -54.1}, {"month": "2026-07", "reviews": 3109, "avg": 1.91, "p1": 72.89, "nps": -60.2}, {"month": "2026-08", "reviews": 3195, "avg": 1.87, "p1": 73.83, "nps": -62.0}, {"month": "2026-09", "reviews": 2683, "avg": 1.81, "p1": 74.73, "nps": -65.4}], "zTheme": [{"month": "2026-03", "Quality & freshness": 16.8, "Support & rider behaviour": 35.8, "Missing / wrong items": 11.0, "App & payment bugs": 11.4, "Refunds & returns": 17.6, "Fees & prices": 10.0, "Late delivery": 18.7, "Out of stock / unserviceable": 5.4}, {"month": "2026-04", "Quality & freshness": 25.4, "Support & rider behaviour": 39.9, "Missing / wrong items": 12.4, "App & payment bugs": 8.7, "Refunds & returns": 23.9, "Fees & prices": 9.2, "Late delivery": 16.4, "Out of stock / unserviceable": 4.5}, {"month": "2026-05", "Quality & freshness": 24.1, "Support & rider behaviour": 40.9, "Missing / wrong items": 11.6, "App & payment bugs": 9.0, "Refunds & returns": 22.1, "Fees & prices": 7.4, "Late delivery": 18.0, "Out of stock / unserviceable": 3.6}, {"month": "2026-06", "Quality & freshness": 25.6, "Support & rider behaviour": 39.6, "Missing / wrong items": 11.3, "App & payment bugs": 10.2, "Refunds & returns": 22.6, "Fees & prices": 8.9, "Late delivery": 15.2, "Out of stock / unserviceable": 3.8}, {"month": "2026-07", "Quality & freshness": 27.8, "Support & rider behaviour": 43.0, "Missing / wrong items": 13.2, "App & payment bugs": 8.9, "Refunds & returns": 25.5, "Fees & prices": 9.7, "Late delivery": 9.8, "Out of stock / unserviceable": 3.0}, {"month": "2026-08", "Quality & freshness": 29.0, "Support & rider behaviour": 42.5, "Missing / wrong items": 14.0, "App & payment bugs": 8.5, "Refunds & returns": 28.4, "Fees & prices": 9.7, "Late delivery": 9.4, "Out of stock / unserviceable": 3.2}, {"month": "2026-09", "Quality & freshness": 25.8, "Support & rider behaviour": 40.9, "Missing / wrong items": 13.7, "App & payment bugs": 8.9, "Refunds & returns": 25.0, "Fees & prices": 11.9, "Late delivery": 9.5, "Out of stock / unserviceable": 2.4}], "zChurn": [{"month": "2026-03", "churn": 5.6, "loyal": 1.3}, {"month": "2026-04", "churn": 6.8, "loyal": 1.7}, {"month": "2026-05", "churn": 7.0, "loyal": 1.3}, {"month": "2026-06", "churn": 6.2, "loyal": 1.3}, {"month": "2026-07", "churn": 7.4, "loyal": 1.9}, {"month": "2026-08", "churn": 8.3, "loyal": 1.8}, {"month": "2026-09", "churn": 8.6, "loyal": 1.7}], "zFee": {"2026-03": 4.2, "2026-04": 3.5, "2026-05": 2.7, "2026-06": 3.4, "2026-07": 3.9, "2026-08": 4.2, "2026-09": 6.5, "2026-10": 8.7}, "benchNps": {"Blinkit": {"2026-03": 43.1, "2026-04": 40.36, "2026-05": 41.66, "2026-06": 44.4, "2026-07": 45.94, "2026-08": 43.54, "2026-09": 43.81}, "Instamart": {"2026-03": 43.68, "2026-04": 33.92, "2026-05": 35.39, "2026-06": 43.01, "2026-07": 45.76, "2026-08": 42.42, "2026-09": 43.04}, "Zepto": {"2026-03": 13.15, "2026-04": -13.61, "2026-05": -3.8, "2026-06": 14.14, "2026-07": 11.69, "2026-08": 10.37, "2026-09": 7.48}}, "fees": {"Blinkit": {"Handling fee": 21.2, "Delivery fee": 27.3, "Small cart fee": 1.5, "Surge / rain fee": 3.0, "Platform fee": 0.0, "Late-night fee": 0.0, "Cancellation fee": 4.5, "Membership / pass": 1.5}, "Zepto": {"Handling fee": 28.3, "Delivery fee": 26.6, "Small cart fee": 2.3, "Surge / rain fee": 2.9, "Platform fee": 1.0, "Late-night fee": 0.6, "Cancellation fee": 0.1, "Membership / pass": 0.4}}, "feeN": {"Blinkit": 66, "Zepto": 695}, "money": {"Blinkit": {"share_mentioning_amount": 3.3, "median": 119, "p75": 487, "total": 14004, "n": 18}, "Zepto": {"share_mentioning_amount": 5.1, "median": 150, "p75": 400, "total": 507466, "n": 882}}, "moneyByDriver": {"App & payment bugs": 249.0, "Fees & prices": 100.0, "Missing / wrong items": 160.0, "Other": 600.0, "Quality & freshness": 200.0, "Refunds & returns": 160.0, "Support & rider behaviour": 100.0}, "votes": {"share_with_votes": 10.5, "votes_total": 10023, "theme_vote_share": {"Quality & freshness": 41.2, "Support & rider behaviour": 63.0, "Missing / wrong items": 11.3, "App & payment bugs": 13.9, "Refunds & returns": 30.4, "Fees & prices": 20.8, "Late delivery": 17.2, "Out of stock / unserviceable": 4.3}, "theme_review_share": {"Quality & freshness": 25.3, "Support & rider behaviour": 40.5, "Missing / wrong items": 12.5, "App & payment bugs": 9.2, "Refunds & returns": 23.9, "Fees & prices": 9.5, "Late delivery": 13.8, "Out of stock / unserviceable": 3.6}}, "topVoted": [{"votes": 1311, "stars": 1, "date": "2026-09-17", "text": "🚨 Alert 🚨 Please do not order from Zepto Wakad. I had ordered a coconut water bottle and they delivered it in warm condition. It was stale. Edit: I wrote to zepto support, you denied for refund. you can pickup the product and conduct a lab test why should cust"}, {"votes": 800, "stars": 1, "date": "2026-06-29", "text": "they made me wait 25 mins for an order and then cancelled it. ill obviously be taking this to the consumer forum, but also felt it was necessary to post a review here."}, {"votes": 558, "stars": 1, "date": "2026-05-25", "text": "Delivering stale / rotten items.. and support teams not taking any accountability.... Running scams with overcharging and hidden fees... I placed an order of two items totaling ₹1134/- from the Supersaver section. Typically, no additional charges apply as the "}, {"votes": 337, "stars": 1, "date": "2026-06-29", "text": "Initially, I really liked this app. However with time the quality of service has degraded. While the prices are comparatively low, the quality of the product is low. Further, they are always late. The delivery time shows 5 mins, but it's always 15-20 mins. Als"}, {"votes": 289, "stars": 1, "date": "2026-03-20", "text": "Asking customers to measure products using inch tapes before sharing OTP. Poor Processes, and even poor email support! Chat support is of no use. Asking us to drop email for any option.Pathetic!!-- Delivery partner do unnecessary calls and involve in arguments"}, {"votes": 204, "stars": 1, "date": "2026-07-01", "text": "Extremely disappointed with Zepto's customer service. I received broken eggs in my order, but since the damage was only visible after opening the sealed package, support refused to help, claiming there was \"no evidence.\" How can anyone know the eggs are broken"}], "versions": [{"app_version": "26.3.1", "size": 556, "mean": 2.18, "nps": -47.3}, {"app_version": "26.3.2", "size": 566, "mean": 2.24, "nps": -45.9}, {"app_version": "26.3.4", "size": 382, "mean": 2.15, "nps": -50.0}, {"app_version": "26.3.5", "size": 553, "mean": 1.96, "nps": -57.9}, {"app_version": "26.4.1", "size": 579, "mean": 1.77, "nps": -66.1}, {"app_version": "26.4.3", "size": 528, "mean": 1.8, "nps": -65.2}, {"app_version": "26.4.4", "size": 589, "mean": 1.44, "nps": -83.4}, {"app_version": "26.4.6", "size": 327, "mean": 1.54, "nps": -77.7}, {"app_version": "26.5.1", "size": 433, "mean": 2.05, "nps": -53.8}, {"app_version": "26.5.2", "size": 836, "mean": 1.94, "nps": -58.5}, {"app_version": "26.5.3", "size": 690, "mean": 1.92, "nps": -60.7}, {"app_version": "26.5.4", "size": 711, "mean": 2.06, "nps": -52.9}, {"app_version": "26.5.5", "size": 865, "mean": 2.11, "nps": -52.4}, {"app_version": "26.6.1", "size": 467, "mean": 2.3, "nps": -41.1}, {"app_version": "26.6.2", "size": 517, "mean": 2.11, "nps": -51.6}, {"app_version": "26.6.4", "size": 396, "mean": 2.18, "nps": -48.0}, {"app_version": "26.6.5", "size": 612, "mean": 2.08, "nps": -52.0}, {"app_version": "26.7.1", "size": 568, "mean": 2.06, "nps": -53.2}, {"app_version": "26.7.2", "size": 577, "mean": 1.99, "nps": -58.1}, {"app_version": "26.7.3", "size": 528, "mean": 1.97, "nps": -56.1}, {"app_version": "26.7.4", "size": 718, "mean": 2.1, "nps": -51.1}, {"app_version": "26.7.6", "size": 440, "mean": 2.01, "nps": -55.9}, {"app_version": "26.8.2", "size": 503, "mean": 1.98, "nps": -56.9}, {"app_version": "26.8.4", "size": 681, "mean": 2.05, "nps": -53.3}, {"app_version": "26.8.6", "size": 571, "mean": 2.04, "nps": -55.5}, {"app_version": "26.8.7", "size": 382, "mean": 1.96, "nps": -59.2}, {"app_version": "26.9.1", "size": 338, "mean": 1.86, "nps": -62.4}, {"app_version": "26.9.2", "size": 457, "mean": 1.9, "nps": -62.4}, {"app_version": "26.9.3", "size": 370, "mean": 1.97, "nps": -57.8}, {"app_version": "26.9.4", "size": 317, "mean": 2.03, "nps": -57.4}], "praise": {"Blinkit": {"Speed / 10-minute delivery": 30.5, "Convenience": 16.5, "Prices & offers": 7.7, "Product quality & freshness": 5.8, "Range of products": 6.7, "Delivery partner": 5.8, "Customer support": 4.2}, "Zepto": {"Speed / 10-minute delivery": 29.6, "Convenience": 9.7, "Prices & offers": 19.0, "Product quality & freshness": 17.1, "Range of products": 4.6, "Delivery partner": 6.9, "Customer support": 3.2}}, "praiseN": {"Blinkit": 430, "Zepto": 216}, "weekday": [{"wd": "Monday", "size": 2915, "mean": 1.84}, {"wd": "Tuesday", "size": 2996, "mean": 1.82}, {"wd": "Wednesday", "size": 3055, "mean": 1.92}, {"wd": "Thursday", "size": 2923, "mean": 1.88}, {"wd": "Friday", "size": 2838, "mean": 1.87}, {"wd": "Saturday", "size": 3178, "mean": 1.82}, {"wd": "Sunday", "size": 3542, "mean": 1.85}], "length": {"Blinkit": {"6–10": 3.49, "11–25": 3.03, "26–50": 2.53, "50+": 1.96}, "Zepto": {"6–10": 2.92, "11–25": 2.14, "26–50": 1.37, "50+": 1.25}}, "kwVal": {"Quality & freshness": {"kw_mention_pct": 26.6, "ai_primary_pct": 20.7, "recall": 75.7}, "Support & rider behaviour": {"kw_mention_pct": 44.5, "ai_primary_pct": 19.3, "recall": 87.3}, "Missing / wrong items": {"kw_mention_pct": 12.8, "ai_primary_pct": 13.5, "recall": 57.9}, "App & payment bugs": {"kw_mention_pct": 9.8, "ai_primary_pct": 10.7, "recall": 45.8}, "Refunds & returns": {"kw_mention_pct": 25.4, "ai_primary_pct": 9.2, "recall": 93.9}, "Fees & prices": {"kw_mention_pct": 9.7, "ai_primary_pct": 7.2, "recall": 73.4}, "Late delivery": {"kw_mention_pct": 10.5, "ai_primary_pct": 8.5, "recall": 64.5}, "Out of stock / unserviceable": {"kw_mention_pct": 2.5, "ai_primary_pct": 2.9, "recall": 50.0}}, "quotes": {"Blinkit": {"Fees & prices": ["Blinkit increase surge charges day by day so me and my friends deleted this app", "You told me to give me cashback after paying from Paytm. Where is it ?"], "Quality & freshness": ["duplicate product don't buy from them mustard oil p marka and now tata gold is missing from my order. dishonest people.", "worst app ever. delievered me the broken earbuds and wasn't sealed packed. still after raising concern they said they can't do anything with that. Helpless people. worst"], "Refunds & returns": ["one day they canceled our order and we did a online payment and yet they didn't refund our money", "fraud app hai 2 mahine hogya mera refund nhi ayaa hai please koe kuch nhi mangwa ya kare ess app se.."], "App & payment bugs": ["It was a very bad experience not getting the options to cancel the placed order they are taking surcharge fee for no reason", "really dispoint with blinkit wallet service very poor unable to use wallet money not using upi also cash on delivery"], "Support & rider behaviour": ["location pin not respected by delivery agents... not trained to find location using app properly", "blinkit 's riders are so rude and ask for extra money too. That's why I've switched to another app."]}, "Zepto": {"Quality & freshness": ["very bad Service, sent expired item and too dirty condition. and not get my amount refund", "Scamming Rascals Zepto. The milk they sell is beyond expiry and in a curdly state and they don't bother to refund the same. Never buy from this scammers again."], "Support & rider behaviour": ["Very bad service I ordered the product The delivery person didn't even call and cancelled the order by himself and took the order for himself when I asked him .", "Delivery boy .is not came home ..and door par pick up mat Kai che"], "Missing / wrong items": ["This is the worst and most fraudulent app.They sent me the wrong items and didnt respond to the helpline.", "terrible service, 4/9 products missing, no resolution. mailed, used in-app chat... but no resolution... such a scam! lost money + time!"], "App & payment bugs": ["very bad you have to give option to cancel order or proceed.there is no option to cancel by mistakenly done order.kindly look once into it", "when I open the app, it keeps closing automatically. It just crashes. fix it"], "Refunds & returns": ["they suppose to pick up the item from me but they didn't do it but not given the refund they know how to cheat customer", "this app's customer support is very bad..I returned one expired item after they mentioned not returned. no refunds"]}}, "churnQuotes": [{"app": "Zepto", "to": "blinkit", "text": "uninstalling it. even though zepto is cheaper than blinkit in all aspects. but the constant notifications are a hassle. u really to change that."}, {"app": "Zepto", "to": "blinkit", "text": "Never going to buy from Zepto. Zepto doesn't keep the promises and instead blames customer for their bad services. It's better to use Blink it or Big Basket."}, {"app": "Blinkit", "to": "zepto", "text": "Lots of extra charges, i always prefer zepto over blinkit."}], "loyalQuotes": [{"app": "Zepto", "text": "I'm a regular customer in the zepto app but still i did not get the referral option in my app.. so disgusting"}, {"app": "Blinkit", "text": "Basic lays, chocolate, coke nothing is available for months now"}, {"app": "Zepto", "text": "all vegetables are spoil and less quantity what is this please refund my money I have trusted zepto and I order everytime"}, {"app": "Zepto", "text": "We are very Regularly purchase from Zepto 649/ , Now How it's increased the price, I paid now 690/- I am so much upset. next time I will not order."}]};
+const $ = s => document.querySelector(s);
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const APPS = ['Blinkit','Zepto'];
+const col = a => ({Blinkit:css('--blinkit'), Zepto:css('--zepto'), Instamart:css('--instamart')}[a]);
+const fmt = (v,d=1) => (v==null?'–':Number(v).toFixed(d));
+const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const NS='http://www.w3.org/2000/svg';
+
+/* ---------- tiny SVG chart kit ---------- */
+const OFF=new Set();
+function vis(id,series){ const v=series.filter(s=>!OFF.has(id+'|'+s.name)); return v.length?v:series; }
+function niceMax(v){ const p=Math.pow(10,Math.floor(Math.log10(v||1))); for(const m of [1,2,2.5,5,10]) if(m*p>=v) return m*p; return 10*p; }
+function ticks(min,max,maxN=6){ const range=max-min, P=[0.1,0.2,0.5,1,2,5,10,20,50,100,200,500,1000], S=[0.25,2.5,25,250];
+  const ok=(set,st)=>set.some(x=>Math.abs(x-st)<1e-9);
+  for(const set of [P,S]) for(const n of [5,4,3,6,2]){ if(n>maxN) continue; const st=range/n; if(ok(set,st)) return Array.from({length:n+1},(_,i)=>+(min+i*st).toFixed(4)); }
+  const raw=range/(Math.min(maxN,5)+1); const st=P.find(x=>x>=raw)||raw; const out=[]; for(let t=Math.ceil(min/st)*st; t<=max+1e-9; t+=st) out.push(+t.toFixed(4)); return out; }
+function setup(id,legendSeries){
+  const host=$(id).parentElement; host.querySelectorAll('svg,.tip').forEach(n=>n.remove());
+  const card=host.parentElement; const old=card.querySelector('.legend[data-for="'+id+'"]'); if(old) old.remove();
+  if(legendSeries && legendSeries.length>1){ const lg=document.createElement('div'); lg.className='legend'; lg.dataset.for=id;
+    lg.classList.add('toggle'); lg.innerHTML=legendSeries.map(s=>`<button type="button" aria-pressed="${!OFF.has(id+'|'+s.name)}" data-n="${esc(s.name)}" title="Click to show or hide"><i class="sw" style="background:${s.color}"></i>${esc(s.name)}</button>`).join('');
+    lg.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{ const k=id+'|'+b.dataset.n; OFF.has(k)?OFF.delete(k):OFF.add(k); const left=legendSeries.filter(s=>!OFF.has(id+'|'+s.name)); if(!left.length) OFF.delete(k); draw(); }));
+    host.before(lg); }
+  const W=host.clientWidth, H=host.clientHeight; const svg=document.createElementNS(NS,'svg'); svg.setAttribute('viewBox',`0 0 ${W} ${H}`); svg.setAttribute('role','img'); svg.setAttribute('aria-label',$(id).getAttribute('aria-label')||'');
+  host.appendChild(svg); const tip=document.createElement('div'); tip.className='tip'; host.appendChild(tip);
+  return {svg,W,H,tip,host};
+}
+function el(svg,tag,attrs,text){ const e=document.createElementNS(NS,tag); for(const k in attrs) e.setAttribute(k,attrs[k]); if(text!=null) e.textContent=text; svg.appendChild(e); return e; }
+function showTip(c,html,x,y){ c.tip.innerHTML=html; c.tip.style.left=Math.min(Math.max(x,70),c.W-70)+'px'; c.tip.style.top=y+'px'; c.tip.classList.add('on'); }
+function hideTip(c){ c.tip.classList.remove('on'); }
+function rbar(x,y,w,h,horizontal){ // rounded data-end only
+  const r=Math.min(4,horizontal?h/2:w/2, horizontal?w:h); if(w<=0||h<=0) return '';
+  if(horizontal) return `M${x},${y}H${x+w-r}Q${x+w},${y} ${x+w},${y+r}V${y+h-r}Q${x+w},${y+h} ${x+w-r},${y+h}H${x}Z`;
+  return `M${x},${y+h}V${y+r}Q${x},${y} ${x+r},${y}H${x+w-r}Q${x+w},${y} ${x+w},${y+r}V${y+h}Z`;
+}
+function measure(svg,text,cls){ const t=el(svg,'text',{class:cls,x:-999,y:-999},text); const w=t.getBBox().width; t.remove(); return w; }
+
+function hbar(id,{labels,series,unit='%',max,tipFmt,colors}){
+  const ALL=series; series=vis(id,series); const c=setup(id,ALL.length>1?ALL:null); const {svg,W,H}=c;
+  const lw=Math.min(Math.max(...labels.map(l=>measure(svg,l,'ax')))+12, W*0.42);
+  const top=4,bottom=22,left=lw,right=44; const iw=W-left-right, ih=H-top-bottom;
+  const mx=max||niceMax(Math.max(...series.flatMap(s=>s.values.filter(v=>v!=null))));
+  const xs=v=>left+(v/mx)*iw; const band=ih/labels.length; const gap=2; const bh=Math.min(22,(band*0.78-gap*(series.length-1))/series.length);
+  ticks(0,mx,iw<300?3:iw<480?4:6).forEach(t=>{ el(svg,'line',{class:'gl',x1:xs(t),x2:xs(t),y1:top,y2:top+ih}); el(svg,'text',{class:'ax-sm',x:xs(t),y:H-6,'text-anchor':'middle'},(unit==='₹'?'₹':'')+t+(unit==='%'?'%':unit==='★'?'★':'')); });
+  labels.forEach((lab,i)=>{ const gy=top+i*band+(band-(bh*series.length+gap*(series.length-1)))/2;
+    const cy=top+i*band+band/2;
+    if(measure(svg,lab,'ax')<=lw-10) el(svg,'text',{class:'ax',x:left-10,y:cy+4,'text-anchor':'end'},lab);
+    else { const w=lab.split(' '); let a=w[0],k=1; while(k<w.length && measure(svg,a+' '+w[k],'ax')<=lw-10){ a+=' '+w[k]; k++; }
+      let b=w.slice(k).join(' '); while(b && measure(svg,b,'ax')>lw-10 && b.length>4) b=b.slice(0,-2).trim()+'…';
+      if(!b){ el(svg,'text',{class:'ax',x:left-10,y:cy+4,'text-anchor':'end'},a); }
+      else { el(svg,'text',{class:'ax',x:left-10,y:cy-2,'text-anchor':'end'},a); el(svg,'text',{class:'ax',x:left-10,y:cy+10,'text-anchor':'end'},b); } }
+    series.forEach((s,j)=>{ const v=s.values[i]; if(v==null) return; const y=gy+j*(bh+gap); const w=xs(v)-left;
+      const fill=(colors&&colors[i])||s.color; const bp=el(svg,'path',{d:rbar(left,y,Math.max(w,1),bh,true),fill,class:'bar'});
+      if(series.length===1) el(svg,'text',{class:'lbl',x:left+w+6,y:y+bh/2+4},(unit==='₹'?'₹':'')+fmt(v,unit==='★'?2:(Number.isInteger(v)?0:1))+(unit==='%'?'%':unit==='★'?'★':''));
+      const hit=el(svg,'rect',{class:'hit',x:left,y:y-1,width:Math.max(iw,w),height:bh+2});
+      hit.addEventListener('mouseenter',()=>{svg.classList.add('hl');bp.classList.add('on');}); hit.addEventListener('mouseleave',()=>{svg.classList.remove('hl');bp.classList.remove('on');});
+      hit.addEventListener('mousemove',()=>showTip(c,tipFmt?tipFmt(s,i,v,lab):`<b>${esc(lab)}</b><br>${esc(s.name)}: ${v}${unit}`,left+w/2+20,y));
+      hit.addEventListener('mouseleave',()=>hideTip(c)); });
+  });
+}
+function vbar(id,{labels,series,unit='%',min=0,max,tipFmt,colors,rotate}){
+  const ALL=series; series=vis(id,series); const c=setup(id,ALL.length>1?ALL:null); const {svg,W,H}=c;
+  const top=8,bottom=rotate?54:24,left=40,right=8; const iw=W-left-right, ih=H-top-bottom;
+  const mx=max||niceMax(Math.max(...series.flatMap(s=>s.values))); const ys=v=>top+ih-((v-min)/(mx-min))*ih;
+  ticks(min,mx,ih<160?3:6).forEach(t=>{ el(svg,'line',{class:'gl',x1:left,x2:W-right,y1:ys(t),y2:ys(t)}); el(svg,'text',{class:'ax-sm',x:left-6,y:ys(t)+4,'text-anchor':'end'},(+t.toFixed(2))+(unit==='%'?'%':unit==='★'?'★':'')); });
+  const band=iw/labels.length, gap=2; const bw=Math.min(34,(band*0.72-gap*(series.length-1))/series.length);
+  labels.forEach((lab,i)=>{ const gx=left+i*band+(band-(bw*series.length+gap*(series.length-1)))/2;
+    const tx=left+i*band+band/2;
+    if(rotate){ el(svg,'text',{class:'ax-sm',x:tx,y:H-bottom+14,'text-anchor':'end',transform:`rotate(-45 ${tx} ${H-bottom+14})`},lab); }
+    else el(svg,'text',{class:'ax',x:tx,y:H-6,'text-anchor':'middle'},lab);
+    series.forEach((s,j)=>{ const v=s.values[i]; const x=gx+j*(bw+gap); const y=ys(v); const fill=(colors&&colors[i])||s.color;
+      const bp=el(svg,'path',{d:rbar(x,y,bw,top+ih-y,false),fill,class:'bar'});
+      const hit=el(svg,'rect',{class:'hit',x:x-1,y:top,width:bw+2,height:ih});
+      hit.addEventListener('mouseenter',()=>{svg.classList.add('hl');bp.classList.add('on');}); hit.addEventListener('mouseleave',()=>{svg.classList.remove('hl');bp.classList.remove('on');});
+      hit.addEventListener('mousemove',()=>showTip(c,tipFmt?tipFmt(s,i,v,lab):`<b>${esc(lab)}</b><br>${esc(s.name)}: ${v}${unit}`,x+bw/2,y));
+      hit.addEventListener('mouseleave',()=>hideTip(c)); });
+  });
+}
+function line(id,{labels,series,unit='',min,max,tipFmt,endLabels,area}){
+  const ALL=series; series=vis(id,series); const c=setup(id,ALL.length>1?ALL:null); const {svg,W,H}=c;
+  const right=endLabels?Math.max(...series.map(s=>measure(svg,s.short||s.name,'lbl')))+16:12;
+  const top=10,bottom=24,left=44; const iw=W-left-right, ih=H-top-bottom;
+  const all=series.flatMap(s=>s.values.filter(v=>v!=null));
+  const lo=min!=null?min:Math.floor(Math.min(...all)/10)*10, hi=max!=null?max:niceMax(Math.max(...all));
+  const ys=v=>top+ih-((v-lo)/(hi-lo))*ih; const xs=i=>left+(labels.length===1?iw/2:i*iw/(labels.length-1));
+  ticks(lo,hi,ih<160?3:6).forEach(t=>{ el(svg,'line',{class:'gl',x1:left,x2:left+iw,y1:ys(t),y2:ys(t)}); el(svg,'text',{class:'ax-sm',x:left-6,y:ys(t)+4,'text-anchor':'end'},(+t.toFixed(2))+unit); });
+  if(lo<0&&hi>0) el(svg,'line',{x1:left,x2:left+iw,y1:ys(0),y2:ys(0),stroke:css('--muted'),'stroke-width':1,'stroke-dasharray':'3 3'});
+  labels.forEach((lab,i)=>el(svg,'text',{class:'ax',x:xs(i),y:H-6,'text-anchor':'middle'},lab));
+  const surf=css('--surface');
+  series.forEach(s=>{ const pts=s.values.map((v,i)=>v==null?null:[xs(i),ys(v)]).filter(Boolean);
+    if(area){ el(svg,'path',{d:`M${pts[0][0]},${top+ih}`+pts.map(p=>`L${p[0]},${p[1]}`).join('')+`L${pts[pts.length-1][0]},${top+ih}Z`,fill:s.color,'fill-opacity':.12}); }
+    el(svg,'path',{d:pts.map((p,i)=>(i?'L':'M')+p[0]+','+p[1]).join(''),fill:'none',stroke:s.color,'stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round'});
+    s.values.forEach((v,i)=>{ if(v==null) return; el(svg,'circle',{cx:xs(i),cy:ys(v),r:4,fill:s.color,stroke:surf,'stroke-width':2,class:'pt','data-i':i}); });
+  });
+  if(endLabels){ const L=series.map(s=>{const v=s.values[s.values.length-1]; return {t:s.short||s.name,x:xs(s.values.length-1),y:ys(v)};}).sort((a,b)=>a.y-b.y);
+    for(let i=1;i<L.length;i++) if(L[i].y-L[i-1].y<15) L[i].y=L[i-1].y+15;
+    L.forEach(l=>el(svg,'text',{class:'lbl',x:l.x+9,y:l.y+4},l.t)); }
+  const cross=el(svg,'line',{x1:0,x2:0,y1:top,y2:top+ih,stroke:css('--muted'),'stroke-width':1,opacity:0});
+  labels.forEach((lab,i)=>{ const w=iw/Math.max(labels.length-1,1); const hit=el(svg,'rect',{class:'hit',x:xs(i)-w/2,y:top,width:w,height:ih});
+    hit.addEventListener('mousemove',()=>{ svg.querySelectorAll('circle.pt').forEach(p=>p.setAttribute('r',+p.dataset.i===i?6:4)); cross.setAttribute('x1',xs(i)); cross.setAttribute('x2',xs(i)); cross.setAttribute('opacity',1);
+      const rows=series.map(s=>`<span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:${s.color};margin-right:6px"></span>${esc(s.name)}: <b>${tipFmt?tipFmt(s,i,s.values[i]):s.values[i]+unit}</b>`).join('<br>');
+      showTip(c,`<b>${esc(lab)}</b><br>${rows}`,xs(i),Math.min(...series.map(s=>ys(s.values[i]??lo))));});
+    hit.addEventListener('mouseleave',()=>{cross.setAttribute('opacity',0);hideTip(c);svg.querySelectorAll('circle.pt').forEach(p=>p.setAttribute('r',4));}); });
+}
+
+/* ---------- static content ---------- */
+function kpis(){
+  const j=D.july; const tiles=[
+    ['Average rating','avg_stars',2,'★','Detailed reviews, 7–17 Jul 2026'],
+    ['One-star reviews','pct_1star',1,'%','Share of all detailed reviews'],
+    
+    ['Say they will leave','churn_pct',1,'%','Share of 1–3★ reviewers (AI-read)']];
+  const T=[['Average rating','avg_stars',0,5,'★',2,()=>`Blinkit leads by ${fmt(j.Blinkit.avg_stars-j.Zepto.avg_stars,2)}★`],
+    ['One-star reviews','pct_1star',0,100,'%',1,()=>`Zepto has ${fmt(j.Zepto.pct_1star/j.Blinkit.pct_1star,1)}× more`],
+    ['Fans minus unhappy (NPS-style)','nps',-100,100,'',1,()=>`${fmt(j.Blinkit.nps-j.Zepto.nps,0)}-point gap`],
+    ['Say they will leave','churn_pct',0,15,'%',1,()=>`Zepto ${fmt(j.Zepto.churn_pct/j.Blinkit.churn_pct,1)}× higher`]];
+  $('#kpis').innerHTML=T.map(([k,f,lo,hi,u,d,v])=>`<div class="kpi"><div class="k">${k}</div><div class="vs">${APPS.map(a=>{ const x=j[a][f];
+      const fill=lo<0?`left:${x<0?50+x/hi*50:50}%;width:${Math.abs(x)/hi*50}%;border-radius:${x<0?'4px 0 0 4px':'0 4px 4px 0'}`:`left:0;width:${(x-lo)/(hi-lo)*100}%`;
+      return `<div class="vsrow"><span style="display:flex;align-items:center;gap:5px"><i class="sw" style="background:${col(a)}"></i>${a}</span><div class="track">${lo<0?'<i class="mid"></i>':''}<i class="fill" style="${fill};background:${col(a)}"></i></div><b>${fmt(x,d)}${u}</b></div>`;}).join('')}</div><span class="verdict">${v()}</span></div>`).join('');
+  const m=D.money.Zepto;
+  const F=[
+    `<b>Zepto is rated far lower:</b> ${fmt(j.Zepto.avg_stars,2)}★ vs ${fmt(j.Blinkit.avg_stars,2)}★ for Blinkit in the same week, matching a bigger public study.`,
+    `<b>Zepto's pain is operational:</b> quality, support and missing items are 54% of complaints. <b>Blinkit's is price:</b> fees top its list at 18%.`,
+    `<b>Zepto users are ${fmt(j.Zepto.churn_pct/j.Blinkit.churn_pct,1)}× more likely to say they're leaving</b> (${fmt(j.Zepto.churn_pct)}% vs ${fmt(j.Blinkit.churn_pct)}%). Blinkit is where they say they're going.`,
+    `<b>Support failures are amplified:</b> 40% of Zepto complaints, but 63% of the “helpful” votes other users give.`,
+    `<b>Talk of leaving is rising:</b> from 5.6% of Zepto complaints in March to 8.6% in September.`,
+    `<b>₹${(m.total/100000).toFixed(1)} lakh is quoted</b> across ${m.n} Zepto complaints that mention a rupee amount (median ₹${m.median}).`];
+  $('#money-take').innerHTML=`Zepto complaints that mention money quote a median of <b>₹${m.median}</b>, adding up to <b>₹${(m.total/100000).toFixed(1)} lakh</b> across ${m.n} reviews. App and payment failures carry the highest stakes (median ₹${D.moneyByDriver['App & payment bugs']}).`;
+  const q=[]; APPS.forEach(a=>Object.entries(D.quotes[a]).slice(0,3).forEach(([d,arr])=>arr.slice(0,1).forEach(t=>q.push([a,d,t]))));
+  $('#drv-quotes').innerHTML=q.map(([a,d,t])=>`<div class="q"><div class="who"><i class="sw" style="background:${col(a)}"></i>${a} · ${esc(d)}</div>“${esc(t)}”</div>`).join('');
+  $('#voted').innerHTML=D.topVoted.slice(0,4).map(r=>`<div class="q"><div class="who"><i class="sw" style="background:${col('Zepto')}"></i>${r.votes.toLocaleString('en-IN')} helpful votes · ${r.stars}★ · ${r.date}</div>“${esc(r.text)}${r.text.length>=260?'…':''}”</div>`).join('');
+  $('#churnq').innerHTML=D.churnQuotes.slice(0,4).map(r=>`<div class="q"><div class="who"><i class="sw" style="background:${col(r.app)}"></i>${r.app} user · mentions ${esc(r.to)}</div>“${esc(r.text)}”</div>`).join('');
+  $('#comp-sub').textContent=`Times each rival is named across ${D.churnNFull.toLocaleString('en-IN')} Zepto 1–3★ reviews that say they're leaving · Mar–Oct 2026`;
+  $('#fee-sub').textContent=`Share of fee complaints naming each fee · 1–3★ reviews mentioning fees (Blinkit ${D.feeN.Blinkit}, Zepto ${D.feeN.Zepto})`;
+  $('#praise-sub').textContent=`Share of 5★ reviews mentioning each strength · July 2026 (Blinkit ${D.praiseN.Blinkit}, Zepto ${D.praiseN.Zepto})`;
+  const P=[
+   ['Zepto','Quality & freshness · 21% of complaints, 15% of them say they’ll leave','Users who reported a stale, expired or damaged item','Complaint ticket closed','Push: apology + instant wallet credit; WhatsApp after 24 h if unopened','₹50 credit vs free replacement on next order','14-day reorder rate vs control'],
+   ['Zepto','Support & rider · 19% of complaints, 63% of helpful votes','Users whose support chat ended without a human agent','Chat closed unresolved','In-app: “Talk to a person” callback within 30 min; email summary','Human callback vs priority chat','Repeat complaint rate; 7-day reorder'],
+   ['Zepto','Missing / wrong items · 14% of complaints','Users who reported a missing or wrong item','Order marked delivered + item report','Push: auto-refund confirmed + apology coupon','Auto-refund only vs refund + ₹30 coupon','7-day reorder rate'],
+   ['Zepto','Named a competitor · about 11 in 100 unhappy users (Blinkit named most)','Unhappy users inactive for 14 days','Day 15 after last order','Push → WhatsApp: lead with what fans love, prices &amp; offers and freshness','₹75 off vs free delivery for a week','% returning within 7 days'],
+   ['Blinkit','Fees & prices · 18% of complaints','Small-basket users who complained about fees','Cart below free-delivery threshold','In-app nudge: “Add ₹X more to skip the delivery fee”','Threshold nudge vs one-time fee waiver','Average order value; reorder rate'],
+   ['Both','Loyal customers at risk · about 2–3 in 100 unhappy users','Long-time or pass holders who left a 1–3★ review','Low rating from a loyal user','Personal email + priority support line','Personal note vs pass extension','30-day retention']];
+  const SZ=[['Segment','--s1'],['Trigger','--s4'],['Message','--s2'],['A/B test','--s3'],['Success metric','--s5']];
+  $('#flowkey').innerHTML=SZ.map(([n,t],i)=>`<span><i class="sw" style="background:var(${t})"></i>${i+1}. ${n}</span>`).join('<span>→</span>');
+  const pct=[21,19,14,11,18,3];
+  $('#plays').innerHTML=P.map((r,i)=>{ const [title,rest]=r[1].split(' · '); const c=r[0]==='Both'?'var(--neutral)':col(r[0]);
+    return `<div class="play"><div class="hd"><span class="pill" style="align-self:flex-start"><i class="sw" style="background:${c}"></i>${r[0]}</span><b>${title}</b><span>${rest||''}</span><div class="bar"><i style="width:${pct[i]/25*100}%;background:${c}"></i></div></div>${r.slice(2).map((x,k)=>`<div class="chev" style="--z:var(${SZ[k][1]})"><span class="t">${SZ[k][0]}</span>${x}</div>`).join('')}</div>`;}).join('');
+}
+
+/* ---------- charts per tab ---------- */
+let drvSrc='ours', themeSet='a';
+const mon = m=>new Date(m+'-01T00:00:00').toLocaleString('en-IN',{month:'short'});
+const render = {
+ overview(){
+  const st=[1,2,3,4,5], rc=s=>`var(--r${s})`, dark=s=>s===3||s===2||s===4;
+  $('#star-legend').innerHTML=st.map(s=>`<span><i class="sw" style="background:${rc(s)}"></i>${s}★</span>`).join('');
+  $('#stack').innerHTML=APPS.map(a=>`<div class="srow"><span class="nm"><i class="sw" style="background:${col(a)}"></i>${a}</span><div class="sbar">${st.map(s=>{const v=D.july[a].stars_dist[s]||0;
+     return `<span title="${a}: ${v}% gave ${s}★" style="flex:${v} 1 0;background:${rc(s)};color:${dark(s)?'#141a26':'#fff'}">${v>=7?Math.round(v):''}</span>`;}).join('')}</div></div>`).join('')
+     +`<div class="srow"><span></span><div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted)"><span>← unhappy (1★)</span><span>happy (5★) →</span></div></div>`;
+  $('#waffles').innerHTML=APPS.map(a=>{const n=Math.round(D.july[a].churn_pct); return `<div class="waf"><h3><i class="sw" style="background:${col(a)}"></i>${a}</h3><div class="grid" role="img" aria-label="${n} of 100">${Array.from({length:100},(_,i)=>`<i style="${i<n?`background:${col(a)}`:''}"></i>`).join('')}</div><div class="big">${n} <small>of 100 say they'll leave</small></div></div>`;}).join('');
+  // finding tiles with mini visuals
+  const NS2='http://www.w3.org/2000/svg', zc=col('Zepto'), bc=col('Blinkit'), grid=css('--grid'), ink=css('--ink'), mut=css('--muted');
+  const ops=54, sup=D.votes.theme_review_share['Support & rider behaviour'], supv=D.votes.theme_vote_share['Support & rider behaviour'];
+  const ch=D.zChurn.map(r=>r.churn), mny=D.money.Zepto;
+  const arc=(p)=>{const r=36,cx=46,cy=46,a=p/100*2*Math.PI,x=cx+r*Math.sin(a),y=cy-r*Math.cos(a);return `M${cx} ${cy-r} A${r} ${r} 0 ${p>50?1:0} 1 ${x} ${y}`;};
+  const spark=()=>{const W=260,H=80,mx=10,xs=i=>8+i*(W-60)/(ch.length-1),ys=v=>H-6-(v/mx)*(H-16);
+    return `<polyline points="${ch.map((v,i)=>xs(i)+','+ys(v)).join(' ')}" fill="none" stroke="${zc}" stroke-width="2.5"/>`+
+     `<circle cx="${xs(0)}" cy="${ys(ch[0])}" r="4" fill="${zc}"/><circle cx="${xs(ch.length-1)}" cy="${ys(ch[ch.length-1])}" r="4" fill="${zc}"/>`+
+     `<text x="${xs(0)}" y="${ys(ch[0])+18}" font-size="12" fill="${mut}">Mar ${ch[0]}%</text><text x="${xs(ch.length-1)+8}" y="${ys(ch[ch.length-1])+4}" font-size="13" font-weight="700" fill="${ink}">${ch[ch.length-1]}%</text><text x="${xs(ch.length-1)-6}" y="${ys(ch[ch.length-1])+20}" font-size="12" fill="${mut}">Sep</text>`;};
+  const bars2=()=>[[`of complaints`,sup,css('--neutral')],[`of helpful votes`,supv,zc]].map(([l,v,c],i)=>`<rect x="0" y="${8+i*42}" width="${v/70*200}" height="22" rx="4" fill="${c}"/><text x="${v/70*200+8}" y="${24+i*42}" font-size="14" font-weight="700" fill="${ink}">${fmt(v,1).replace('.0','')}%</text><text x="0" y="${44+i*42}" font-size="11.5" fill="${mut}">${l}</text>`).join('');
+  const rupee=()=>{const m=[['App bugs',249],['Quality',200],['Missing',160]];return m.map(([l,v],i)=>`<text x="0" y="${16+i*28}" font-size="12" fill="${mut}">${l}</text><rect x="64" y="${5+i*28}" width="${v/260*150}" height="16" rx="4" fill="${css('--neutral')}"/><text x="${70+v/260*150}" y="${17+i*28}" font-size="12.5" font-weight="700" fill="${ink}">₹${v}</text>`).join('');};
+  const tiles=[
+   ['Zepto’s pain is operational',`<path d="M46 10 A36 36 0 1 1 45.9 10" fill="none" stroke="${grid}" stroke-width="14"/><path d="${arc(ops)}" fill="none" stroke="${zc}" stroke-width="14"/><text x="46" y="52" text-anchor="middle" font-size="18" font-weight="700" fill="${ink}">${ops}%</text><text x="104" y="38" font-size="12.5" fill="${ink}" font-weight="700">Quality, support</text><text x="104" y="54" font-size="12.5" fill="${ink}" font-weight="700">&amp; missing items</text><text x="104" y="72" font-size="12" fill="${mut}">Blinkit #1: fees (18%)</text>`,'Three operational problems are <b>over half</b> of Zepto’s complaints.'],
+   ['Support complaints get amplified',bars2(),'Support is 40% of complaints but collects <b>63% of helpful votes</b>.'],
+   ['Talk of leaving is rising',spark(),'Share of Zepto complaints saying they’ll leave, <b>Mar→Sep 2026</b>.'],
+   [`₹${(mny.total/100000).toFixed(1)} lakh quoted in complaints`,rupee(),`Median rupee amount by complaint, across <b>${mny.n} Zepto reviews</b>.`]];
+  $('#ftiles').innerHTML=tiles.map(([k,svg,c])=>`<div class="ft"><div class="k">${k}</div><svg viewBox="0 0 260 92" preserveAspectRatio="xMinYMid meet">${svg}</svg><div class="c">${c}</div></div>`).join('');
+  const ms=Object.keys(D.benchNps.Blinkit);
+  line('#c-bench',{labels:ms.map(mon),series:['Blinkit','Instamart','Zepto'].map(a=>({name:a,color:col(a),values:ms.map(m=>D.benchNps[a][m])})),min:-20,max:60,endLabels:true,
+    tipFmt:(s,i,v)=>'NPS '+fmt(v,1)});
+ },
+ drivers(){
+  const L=D.drivers.labels, src=drvSrc==='ours';
+  { const keys=L.slice(0,8); const dv=keys.map(k=>({k,v:+(D.drivers.Zepto[L.indexOf(k)]-D.drivers.Blinkit[L.indexOf(k)]).toFixed(1)})).sort((a,b)=>b.v-a.v);
+    const c=setup('#c-diff',null); const {svg,W,H}=c; const lw=Math.min(Math.max(...dv.map(d=>measure(svg,d.k,'ax')))+14,W*0.36);
+    const left=lw,right=40,top=4,bottom=22, iw=W-left-right-30, ih=H-top-bottom, lim=12, x0=left+30+iw/2, xs=v=>x0+v/lim*(iw/2); const band=ih/dv.length, bh=Math.min(20,band*.7);
+    [-10,-5,0,5,10].forEach(t=>{ el(svg,'line',{class:'gl',x1:xs(t),x2:xs(t),y1:top,y2:top+ih}); el(svg,'text',{class:'ax-sm',x:xs(t),y:H-6,'text-anchor':'middle'},(t>0?'+':'')+t); });
+    el(svg,'line',{x1:x0,x2:x0,y1:top,y2:top+ih,stroke:css('--muted'),'stroke-width':1.5});
+    dv.forEach((d,i)=>{ const y=top+i*band+(band-bh)/2, cy=y+bh/2; const c2=d.v>=0?col('Zepto'):col('Blinkit');
+      el(svg,'text',{class:'ax',x:left-10,y:cy+4,'text-anchor':'end'},d.k);
+      const w=Math.abs(xs(d.v)-x0); if(d.v>=0) el(svg,'path',{d:rbar(x0,y,Math.max(w,1),bh,true),fill:c2});
+      else el(svg,'path',{d:rbar(x0-w,y,Math.max(w,1),bh,true),fill:c2,transform:`rotate(180 ${x0-w/2} ${cy})`});
+      el(svg,'text',{class:'lbl',x:d.v>=0?xs(d.v)+6:xs(d.v)-6,y:cy+4,'text-anchor':d.v>=0?'start':'end'},(d.v>0?'+':'')+d.v);
+      const hit=el(svg,'rect',{class:'hit',x:left,y,width:W-left,height:bh}); hit.addEventListener('mousemove',()=>showTip(c,`<b>${esc(d.k)}</b><br>Zepto ${D.drivers.Zepto[L.indexOf(d.k)]}% vs Blinkit ${D.drivers.Blinkit[L.indexOf(d.k)]}%`,xs(d.v),y)); hit.addEventListener('mouseleave',()=>hideTip(c)); });
+  }
+  $('#drv-sub').textContent = src? `Main complaint in each 1–3★ review, tagged with an AI tool · July 2026 (Blinkit ${D.drivers.n.Blinkit}, Zepto ${D.drivers.n.Zepto} reviews)` : 'Main complaint in unhappy reviews · bigger public study, Jul–Sep 2026 (1,000 tagged reviews per app)';
+  hbar('#c-drivers',{labels:L,series:APPS.map(a=>({name:a,color:col(a),values:src?D.drivers[a]:D.drivers['bench'+a]})),max:25,
+    tipFmt:(s,i,v,l)=>`<b>${esc(l)}</b><br>${s.name}: ${v}% of complaints`});
+  const cd=Object.entries(D.churnByDriver.Zepto).filter(([k,v])=>v!=null).sort((a,b)=>b[1]-a[1]);
+  hbar('#c-churndrv',{labels:cd.map(x=>x[0]),series:[{name:'Zepto',color:col('Zepto'),values:cd.map(x=>x[1])}],max:20,
+    tipFmt:(s,i,v,l)=>`<b>${esc(l)}</b><br>${v}% say they'll leave`});
+  const mb=Object.entries(D.moneyByDriver).filter(([k])=>k!=='Other').sort((a,b)=>b[1]-a[1]);
+  hbar('#c-money',{labels:mb.map(x=>x[0]),series:[{name:'Median amount',color:css('--neutral'),values:mb.map(x=>x[1])}],unit:'₹',max:300,
+    tipFmt:(s,i,v,l)=>`<b>${esc(l)}</b><br>Median ₹${v}`});
+ },
+ trends(){
+  const ms=D.zMonthly.map(r=>r.month), lab=ms.map(mon);
+  line('#c-zavg',{labels:lab,series:[{name:'Average stars',color:col('Zepto'),values:D.zMonthly.map(r=>r.avg)}],unit:'★',min:1,max:3,
+    tipFmt:(s,i,v)=>`${fmt(v,2)}★ · ${D.zMonthly[i].reviews.toLocaleString('en-IN')} reviews`});
+  line('#c-zchurn',{labels:lab,series:[{name:'Say they’re leaving',color:col('Zepto'),values:D.zChurn.map(r=>r.churn)}],unit:'%',min:0,max:10,area:true,
+    tipFmt:(s,i,v)=>`${v}% of complaints`});
+  const sets={a:['Quality & freshness','Refunds & returns','Missing / wrong items','Fees & prices'],b:['Late delivery','App & payment bugs','Out of stock / unserviceable']};
+  const short={'Quality & freshness':'Quality','Refunds & returns':'Refunds','Missing / wrong items':'Missing items','Fees & prices':'Fees','Late delivery':'Late delivery','App & payment bugs':'App bugs','Out of stock / unserviceable':'Out of stock'};
+  const pal=[css('--s1'),css('--s2'),css('--s3'),css('--s4')];
+  line('#c-zthemes',{labels:lab,series:sets[themeSet].map((k,i)=>({name:k,short:short[k],color:pal[i],values:D.zTheme.map(r=>r[k])})),unit:'%',min:0,max:30,endLabels:true,
+    tipFmt:(s,i,v)=>v+'%'});
+  $('#theme-take').innerHTML = themeSet==='a' ? 'Quality complaints rose from <b>17% to 26%</b> and refund complaints from <b>18% to 25%</b> between March and September. The problems are moving from <i>getting</i> the order to <i>what arrives</i> and <i>getting money back</i>.' : 'Late-delivery complaints <b>halved</b> (19% → 10%) from July onwards, and out-of-stock complaints fell from 5% to 2%. Speed has improved, so messaging can credibly promise it.';
+  const V=D.versions;
+  vbar('#c-ver',{labels:V.map(v=>v.app_version),series:[{name:'Average stars',color:css('--neutral'),values:V.map(v=>v.mean)}],colors:V.map(v=>v.app_version.startsWith('26.4')?col('Zepto'):css('--neutral')),
+    unit:'★',min:1,max:2.5,rotate:true,tipFmt:(s,i,v,l)=>`<b>Version ${l}</b><br>${fmt(v,2)}★ · ${V[i].size} reviews`});
+ },
+ standout(){
+  const c=Object.entries(D.competitorsFull).filter(([k])=>!['dmart','jiomart'].includes(k)).sort((a,b)=>b[1]-a[1]);
+  const nm={blinkit:'Blinkit',instamart:'Swiggy Instamart',flipkart:'Flipkart Minutes',amazon:'Amazon',bigbasket:'BigBasket'};
+  hbar('#c-comp',{labels:c.map(x=>nm[x[0]]||x[0]),series:[{name:'Mentions',color:css('--neutral'),values:c.map(x=>x[1])}],colors:c.map(x=>x[0]==='blinkit'?col('Blinkit'):css('--neutral')),unit:'',max:100,
+    tipFmt:(s,i,v,l)=>`<b>${esc(l)}</b><br>${v} mentions`});
+  const V=D.votes, ks=Object.keys(V.theme_review_share).sort((a,b)=>V.theme_vote_share[b]-V.theme_vote_share[a]);
+  hbar('#c-votes',{labels:ks,series:[{name:'Share of complaints',color:css('--neutral'),values:ks.map(k=>V.theme_review_share[k])},{name:'Share of helpful votes',color:col('Zepto'),values:ks.map(k=>V.theme_vote_share[k])}],max:70,
+    tipFmt:(s,i,v,l)=>`<b>${esc(l)}</b><br>${s.name}: ${v}%`});
+  const fk=['Handling fee','Delivery fee','Cancellation fee','Surge / rain fee','Small cart fee','Membership / pass'];
+  hbar('#c-fees',{labels:fk,series:APPS.map(a=>({name:a,color:col(a),values:fk.map(k=>D.fees[a][k])})),max:30,
+    tipFmt:(s,i,v,l)=>`<b>${esc(l)}</b><br>${s.name}: ${v}% of fee complaints`});
+  const bands=['6–10','11–25','26–50','50+'];
+  line('#c-len',{labels:bands,series:APPS.map(a=>({name:a,color:col(a),values:bands.map(b=>D.length[a][b])})),unit:'★',min:1,max:4,endLabels:true,
+    tipFmt:(s,i,v)=>`<b>${bands[i]} words</b><br>${s.name}: ${fmt(v,2)}★`});
+  const pk=Object.keys(D.praise.Zepto);
+  hbar('#c-praise',{labels:pk,series:APPS.map(a=>({name:a,color:col(a),values:pk.map(k=>D.praise[a][k])})),max:35,
+    tipFmt:(s,i,v,l)=>`<b>${esc(l)}</b><br>${s.name}: ${v}% of 5★ reviews`});
+  vbar('#c-wd',{labels:D.weekday.map(r=>r.wd.slice(0,3)),series:[{name:'Average stars',color:col('Zepto'),values:D.weekday.map(r=>r.mean)}],unit:'★',min:0,max:2.5,
+    tipFmt:(s,i,v,l)=>`<b>${D.weekday[i].wd}</b><br>${fmt(v,2)}★ · ${D.weekday[i].size.toLocaleString('en-IN')} reviews`});
+ },
+ fix(){
+  const Z={crit:css('--crit'),warn:css('--warn'),mon:css('--neutral')};
+  const short={'Quality & freshness':'Quality','Support & rider behaviour':'Support','Missing / wrong items':'Missing items','App & payment bugs':'App bugs','Refunds & returns':'Refunds','Fees & prices':'Fees','Late delivery':'Late delivery','Out of stock / unserviceable':'Out of stock'};
+  const churners={'Quality & freshness':27,'Support & rider behaviour':22,'Missing / wrong items':16,'Refunds & returns':9,'Late delivery':8,'Fees & prices':6,'App & payment bugs':4,'Out of stock / unserviceable':0};
+  const zone=k=>churners[k]>=15?'crit':churners[k]>=8?'warn':'mon';
+  const keys=Object.keys(churners);
+  /* --- priority matrix --- */
+  { const c=setup('#c-matrix',null); const {svg,W,H}=c; const left=44,right=16,top=14,bottom=40; const iw=W-left-right, ih=H-top-bottom;
+    const xmax=25,ymax=16; const xs=v=>left+v/xmax*iw, ys=v=>top+ih-v/ymax*ih;
+    // danger zone shading
+    el(svg,'rect',{x:xs(10),y:ys(ymax),width:xs(xmax)-xs(10),height:ys(11.1)-ys(ymax),fill:Z.crit,opacity:.08,rx:6});
+    el(svg,'text',{class:'ax-sm',x:xs(xmax)-6,y:ys(ymax)+14,'text-anchor':'end','font-weight':'700',fill:Z.crit},'DANGER ZONE');
+    ticks(0,xmax,iw<300?3:5).forEach(t=>{ el(svg,'line',{class:'gl',x1:xs(t),x2:xs(t),y1:top,y2:top+ih}); el(svg,'text',{class:'ax-sm',x:xs(t),y:top+ih+15,'text-anchor':'middle'},t+'%'); });
+    ticks(0,ymax,4).forEach(t=>{ el(svg,'line',{class:'gl',x1:left,x2:left+iw,y1:ys(t),y2:ys(t)}); el(svg,'text',{class:'ax-sm',x:left-6,y:ys(t)+4,'text-anchor':'end'},t+'%'); });
+    el(svg,'line',{x1:xs(10),x2:xs(10),y1:top,y2:top+ih,stroke:css('--muted'),'stroke-dasharray':'3 3'});
+    el(svg,'line',{x1:left,x2:left+iw,y1:ys(11.1),y2:ys(11.1),stroke:css('--muted'),'stroke-dasharray':'3 3'});
+    el(svg,'text',{class:'ax-sm',x:left+4,y:ys(11.1)-5},'Zepto average 11.1%');
+    el(svg,'text',{class:'ax',x:left+iw/2,y:H-4,'text-anchor':'middle'},'Share of complaints →');
+    el(svg,'text',{class:'ax',x:12,y:top+ih/2,'text-anchor':'middle',transform:`rotate(-90 12 ${top+ih/2})`},'Say they’ll leave →');
+    const pos={'Refunds & returns':'r','Late delivery':'l','Fees & prices':'l','Support & rider behaviour':'b','Quality & freshness':'l','Missing / wrong items':'l','App & payment bugs':'r','Out of stock / unserviceable':'r'};
+    const pts=keys.map(k=>({k,x:D.drivers.Zepto[D.drivers.labels.indexOf(k)],y:D.churnByDriver.Zepto[k],v:D.votes.theme_vote_share[k]})).sort((a,b)=>b.v-a.v);
+    const surf=css('--surface');
+    pts.forEach(p=>{ const r=5+Math.sqrt(p.v)*2.1, cx=xs(p.x), cy=ys(p.y);
+      el(svg,'circle',{cx,cy,r,fill:Z[zone(p.k)],'fill-opacity':.85,stroke:surf,'stroke-width':2});
+      const d=pos[p.k]; const lx=d==='l'?cx-r-6:d==='r'?cx+r+6:cx, ly=d==='b'?cy+r+14:cy+4;
+      el(svg,'text',{class:'lbl',x:lx,y:ly,'text-anchor':d==='l'?'end':d==='r'?'start':'middle'},short[p.k]);
+      const hit=el(svg,'circle',{class:'hit',cx,cy,r:Math.max(r,12)});
+      hit.addEventListener('mousemove',()=>showTip(c,`<b>${esc(p.k)}</b><br>${p.x}% of complaints · ${p.y}% say they'll leave<br>${p.v}% of helpful votes`,cx,cy-r));
+      hit.addEventListener('mouseleave',()=>hideTip(c)); });
+  }
+  /* --- leave-threat bars --- */
+  const rk=keys.slice().sort((a,b)=>churners[b]-churners[a]);
+  hbar('#c-risk',{labels:rk.map(k=>short[k]),series:[{name:'Leave-threats',color:Z.crit,values:rk.map(k=>churners[k])}],unit:'',max:30,colors:rk.map(k=>Z[zone(k)]),
+    tipFmt:(s,i,v,l)=>`<b>${esc(rk[i])}</b><br>${v} of 99 leave-threats (${fmt(v/99*100,0)}%)`});
+  /* --- fix rows --- */
+  const rows=[
+   ['crit','Quality & freshness','21% of complaints · 15% of them say they’ll leave · median ₹200 at stake','Dark-store operations',['Expiry and freshness check at packing','Pull a product batch after 3+ complaints in a day','Photo of the packed items on the order screen'],['Within 1 hour: apology push + replacement or wallet credit','Day 7: “freshness promise” message to rebuild trust'],'<b>14-day reorder rate</b> vs a no-message group; quality complaints back to 17%'],
+   ['crit','Support & rider behaviour','19% of complaints · 63% of all helpful votes','Customer support team',['A human agent after two bot replies','Rider ratings, with coaching for repeat low scores'],['Chat closed unresolved: “talk to a person” callback within 30 min','Next day: one-question satisfaction survey'],'<b>Repeat-complaint rate</b> and satisfaction score'],
+   ['crit','Missing / wrong items','14% of complaints · 13% say they’ll leave · median ₹160','Operations + finance',['Scan every item at packing, weight-check the bag','Auto-refund missing items under ₹200, no chat needed'],['Instant “refund done” push + small coupon','Next order: “we double-checked your bag” note'],'<b>7-day reorder rate</b> after a missing-item report'],
+   ['warn','Refunds & returns','Refund complaints rose from 18% to 25% of Zepto 1–3★ reviews since March','Finance',['Instant refund to wallet; bank refund in a stated time','Refund status visible in the app'],['Status pushes: started → approved → credited','WhatsApp if the push is unopened after 24 h'],'<b>Refund complaint share</b> and days to refund'],
+   ['warn','Late delivery','9% of complaints, and already improving (19% → 10%)','Operations',['Show an honest ETA when stores are busy, not a fixed “10 minutes”'],['“Running late” push with a small credit, before the customer complains'],'<b>Late-delivery share</b> stays under 10%'],
+   ['mon','Fees & app bugs','Fees are Blinkit’s #1 complaint (18%); Zepto’s April release (26.4.x) hit 1.44★','Product + pricing',['Full fee breakdown before checkout','Pause an app rollout when its rating drops'],['“Add ₹X more to skip the delivery fee” nudge','“We fixed it” message to users who reported the bug'],'<b>Average order value</b> and rating per app version']];
+  $('#fixrows').innerHTML=rows.map(([z,p,st,who,fx,mo,met])=>`<div class="fixrow" style="--z:${Z[z]}">
+    <div class="prob"><span class="tag">${z==='crit'?'● Fix now':z==='warn'?'▲ Fix next':'■ Monitor'}</span><b>${p}</b><div class="stat">${st}</div></div>
+    <div><span class="lab">1 · Fix the cause</span><div class="who">Owner: ${who}</div><ul>${fx.map(x=>`<li>${x}</li>`).join('')}</ul></div>
+    <div><span class="lab">2 · Win them back (messaging)</span><ul>${mo.map(x=>`<li>${x}</li>`).join('')}</ul></div>
+    <div class="met"><span class="lab">3 · Prove it</span>${met}</div></div>`).join('');
+  /* --- journey --- */
+  const ph=[['Stop the bleed','crit','1/3'],['Win them back','warn','3/6'],['Keep them','good','6/8']];
+  const st=[['crit','Hour 0','Detect','A complaint, refund request or 1–3★ rating is spotted','Automatic trigger'],
+   ['crit','Hour 1','Apologise & fix','Personal message; refund or replacement confirmed','Push / in-app'],
+   ['warn','Day 1','Reassure','“Your issue is resolved” summary if the push wasn’t opened','WhatsApp / email'],
+   ['warn','Day 7','Re-engage','Lead with what fans love: prices, offers and freshness','Push'],
+   ['warn','Day 14','Win-back offer','Still inactive? A/B test ₹75 off vs a week of free delivery','Push → WhatsApp'],
+   ['good','Day 30','Reward','Loyalty perk or pass trial for customers who came back','Email / in-app'],
+   ['good','Day 45','Ask','Happy, recovered customers are invited to update their rating','In-app']];
+  const zc=z=>z==='good'?css('--good'):Z[z];
+  let html=''; ph.forEach(([n,z,cc])=>{ html+=`<div class="jphase" style="--z:${zc(z)};--c:${cc}"><i class="zd" style="background:${zc(z)}"></i>${n}</div>`;
+    st.filter(s=>s[0]===z).forEach(s=>{ html+=`<div class="jstep" style="--z:${zc(z)}"><span class="when">${s[1]}</span><b>${s[2]}</b><p>${s[3]}</p><span class="ch">${s[4]}</span></div>`; }); });
+  $('#journey').innerHTML=html;
+  /* --- targets (bullet chart) --- */
+  { const T=[['Zepto 1★ reviews (July)',72.1,41.8,'Blinkit level'],['Quality complaints',25.8,16.8,'March level'],['Refund complaints',25.0,17.6,'March level'],['Say they’ll leave',8.6,5.6,'March level']];
+    const c=setup('#c-targets',null); const {svg,W,H}=c; const lw=Math.min(Math.max(...T.map(t=>measure(svg,t[0],'ax')))+12,W*0.4);
+    const left=lw,right=20,top=6,bottom=22; const iw=W-left-right, ih=H-top-bottom; const xs=v=>left+v/80*iw; const band=ih/T.length, bh=Math.min(20,band*0.42);
+    ticks(0,80,iw<300?4:4).forEach(t=>{ el(svg,'line',{class:'gl',x1:xs(t),x2:xs(t),y1:top,y2:top+ih}); el(svg,'text',{class:'ax-sm',x:xs(t),y:H-6,'text-anchor':'middle'},t+'%'); });
+    const good=css('--good');
+    T.forEach(([lab,now,tg,src],i)=>{ const cy=top+i*band+band/2-4, y=cy-bh/2;
+      el(svg,'text',{class:'ax',x:left-10,y:cy+4,'text-anchor':'end'},lab);
+      el(svg,'path',{d:rbar(left,y,xs(now)-left,bh,true),fill:Z.crit,'fill-opacity':.85});
+      el(svg,'text',{class:'lbl',x:xs(now)+6,y:cy+4},now+'%');
+      el(svg,'line',{x1:xs(tg),x2:xs(tg),y1:y-5,y2:y+bh+5,stroke:good,'stroke-width':3,'stroke-linecap':'round'});
+      el(svg,'text',{class:'ax-sm',x:xs(tg),y:y+bh+16,'text-anchor':'middle'},'target '+tg+'% · '+src);
+      const hit=el(svg,'rect',{class:'hit',x:left,y:y-6,width:iw,height:bh+24});
+      hit.addEventListener('mousemove',()=>showTip(c,`<b>${esc(lab)}</b><br>Now ${now}% · target ${tg}% (${src})<br>Gap: ${fmt(now-tg,1)} points`,xs(now)/2+left/2,y));
+      hit.addEventListener('mouseleave',()=>hideTip(c)); });
+    // legend inline
+    const host=$('#c-targets').parentElement; }
+  /* --- RAG --- */
+  const R=[['Say they’ll leave','> 8%','6–8%','< 6%','8.6%','r'],['Quality complaints','> 22%','18–22%','< 18%','25.8%','r'],['Refund complaints','> 22%','18–22%','< 18%','25.0%','r'],['Late-delivery complaints','> 15%','10–15%','< 10%','9.5%','g']];
+  const nm={r:['Red',css('--crit')],a:['Amber',css('--warn')],g:['Green',css('--good')]};
+  $('#rag').innerHTML=`<div class="ragrow hd"><span>Metric (Zepto, Sep)</span><span>Red</span><span>Amber</span><span>Green</span><span class="nowh">Now</span></div>`+
+    R.map(r=>`<div class="ragrow"><span class="m">${r[0]}</span><span class="r">${r[1]}</span><span class="a">${r[2]}</span><span class="g">${r[3]}</span><span class="now"><i class="zd" style="background:${nm[r[5]][1]}"></i>${r[4]} · ${nm[r[5]][0]}</span></div>`).join('');
+ },
+ playbook(){},
+ method(){
+  { const F=[['Collected',22661],['Kept (6+ words)',22651],['Same week, both apps',2204],['Complaints tagged',1437],['Checked a second time',120]];
+    const c=setup('#c-funnel',null); const {svg,W,H}=c; const lw=Math.min(Math.max(...F.map(f=>measure(svg,f[0],'ax')))+14,W*0.42);
+    const left=lw,right=70,top=4,bottom=22,iw=W-left-right,ih=H-top-bottom; const lmin=1,lmax=5; const xs=v=>left+(Math.log10(v)-lmin)/(lmax-lmin)*iw;
+    const band=ih/F.length,bh=Math.min(24,band*.72); const ramp=['--accent','--accent','--s1','--s3','--s4'];
+    [10,100,1000,10000,100000].forEach(t=>{ el(svg,'line',{class:'gl',x1:xs(t),x2:xs(t),y1:top,y2:top+ih}); el(svg,'text',{class:'ax-sm',x:xs(t),y:H-6,'text-anchor':'middle'},t>=1000?(t/1000)+'k':t); });
+    F.forEach(([l,v],i)=>{ const y=top+i*band+(band-bh)/2; el(svg,'text',{class:'ax',x:left-10,y:y+bh/2+4,'text-anchor':'end'},l);
+      el(svg,'path',{d:rbar(left,y,xs(v)-left,bh,true),fill:css(ramp[i])}); el(svg,'text',{class:'lbl',x:xs(v)+6,y:y+bh/2+4},v.toLocaleString('en-IN')); });
+  }
+  const kv=Object.entries(D.kwVal).sort((a,b)=>a[1].recall-b[1].recall);
+  hbar('#c-kw',{labels:kv.map(x=>x[0]),series:[{name:'Caught by keywords',color:css('--accent'),values:kv.map(x=>x[1].recall)}],max:100,
+    tipFmt:(s,i,v,l)=>`<b>${esc(l)}</b><br>Keywords catch ${v}%, miss ${fmt(100-v,1)}%`});
+ }
+};
+let active='overview';
+function draw(){ try{ render[active](); }catch(e){ console.error(e); } }
+function show(id){
+  document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-selected',String(t.getAttribute('aria-controls')===id)));
+  document.querySelectorAll('section.panel').forEach(p=>p.hidden=(p.id!==id));
+  active=id; draw(); const p=document.getElementById(id); p.classList.remove('enter'); void p.offsetWidth; p.classList.add('enter'); try{ localStorage.setItem('qc-tab',id); }catch(e){}
+}
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>show(t.getAttribute('aria-controls'))));
+document.querySelector('.tabrow').addEventListener('keydown',e=>{ const tabs=[...document.querySelectorAll('.tab')]; const i=tabs.indexOf(document.activeElement); if(i<0) return;
+  let n=null; if(e.key==='ArrowRight') n=(i+1)%tabs.length; if(e.key==='ArrowLeft') n=(i-1+tabs.length)%tabs.length; if(e.key==='Home') n=0; if(e.key==='End') n=tabs.length-1;
+  if(n!=null){ e.preventDefault(); tabs[n].focus(); show(tabs[n].getAttribute('aria-controls')); } });
+document.querySelectorAll('#drivers .seg button').forEach(b=>b.addEventListener('click',()=>{drvSrc=b.dataset.src;document.querySelectorAll('#drivers .seg button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+document.querySelectorAll('#theme-seg button').forEach(b=>b.addEventListener('click',()=>{themeSet=b.dataset.set;document.querySelectorAll('#theme-seg button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+try{ matchMedia('(prefers-color-scheme: dark)').addEventListener('change',draw); }catch(e){}
+new MutationObserver(draw).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+let rt; window.addEventListener('resize',()=>{clearTimeout(rt); rt=setTimeout(draw,150);});
+kpis();
+let start='overview'; const h=(location.hash||'').slice(1); if(document.getElementById(h)&&document.getElementById(h).classList.contains('panel')) start=h; else { try{ const s=localStorage.getItem('qc-tab'); if(s&&document.getElementById(s)) start=s; }catch(e){} }
+show(start);
+</script>
+
+</body></html>
